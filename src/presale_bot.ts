@@ -43,6 +43,13 @@ class PresaleBot {
         this.trigger_time = trigger_time / 1000;
     }
 
+    /**
+     * @function sendTxCallback()
+     * Callback to be used after tx has been issued to the blockchain via web3.eth.sendSignedTransaction();
+     * @param {Error} error error - if any - issuing the transaction.
+     * @param {result} result transaction hash - if successfull.
+     */
+
     private sendTxCallback(error : Error, result : string) {
         if (error) {
             console.log("The following error occurred: ");

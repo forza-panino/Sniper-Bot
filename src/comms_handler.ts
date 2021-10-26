@@ -104,6 +104,12 @@ class CommsHandler {
         })        
     }
 
+    /**
+     * @function defaultCallback()
+     * default callback to be used after tx has been issued to the blockchain via web3.eth.sendSignedTransaction();
+     * @param {Error} error error - if any - issuing the transaction.
+     * @param {result} result transaction hash - if successfull.
+     */
     private defaultCallback(error : Error, result : any) {
         if (error) 
             console.log(error);
