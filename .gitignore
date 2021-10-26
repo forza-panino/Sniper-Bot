@@ -1,4 +1,6 @@
 /build/
 /configs/*
+!/configs/.gitignore
 /logs/*
+!/logs/.gitignore
 /node_modules/
