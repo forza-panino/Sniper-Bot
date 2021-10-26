@@ -1,0 +1,19 @@
+{
+    "compilerOptions": {
+      "target": "ES6",
+      "module": "CommonJS",
+      "noImplicitAny": true,
+      "removeComments": true,
+      "preserveConstEnums": true,
+      "sourceMap": true,
+      "allowSyntheticDefaultImports": true,
+      "outDir": "build"
+    },
+    "files": [
+      "src/comms_handler.ts",
+      "src/configs_handler.ts",
+      "src/presale_bot.ts",
+      "src/bot_initialization.ts",
+      "src/main.ts"
+    ]
+  }
