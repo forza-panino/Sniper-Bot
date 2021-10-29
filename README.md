@@ -79,11 +79,11 @@ These are the commands that you are most likely to need:
   - sets number of delay blocks to **zero** (antibot avoidance **OFF**).
 * `npm run mainnet-presale-with-delay`: 
   - starts bot on the **mainnet**
-  - selects the mode *presale* (snipes fairlaunches)
+  - selects the mode *presale* (snipes presales)
   - sets number of delay blocks to **5** (antibot avoidance **ON**).
 * `npm run mainnet-fairlaunch` _(note: fairlaunch feature still under development)_ : 
   - starts bot on the **mainnet**
-  - selects the mode *fairlaunch* (snipes presales)
+  - selects the mode *fairlaunch* (snipes fairlaunches)
   - sets number of delay blocks to **zero** (antibot avoidance **OFF**).
 * `npm run mainnet-fairlaunch-with-delay` _(note: fairlaunch feature still under development)_ : 
   - starts bot on the **mainnet**
@@ -100,11 +100,11 @@ These commands are useful if you want to try the bot on the testnet:
   - sets number of delay blocks to **zero** (antibot avoidance **OFF**).
 * `npm run testnet-presale-with-delay`: 
   - starts bot on the **testnet**
-  - selects the mode *presale* (snipes fairlaunches)
+  - selects the mode *presale* (snipes presales)
   - sets number of delay blocks to **5** (antibot avoidance **ON**).
 * `npm run testnet-fairlaunch` _(note: fairlaunch feature still under development)_ : 
   - starts bot on the **testnet**
-  - selects the mode *fairlaunch* (snipes presales)
+  - selects the mode *fairlaunch* (snipes fairlaunches)
   - sets number of delay blocks to **zero** (antibot avoidance **OFF**).
 * `npm run testnet-fairlaunch-with-delay` _(note: fairlaunch feature still under development)_ : 
   - starts bot on the **testnet**
