@@ -21,6 +21,8 @@ This free-to-use bot allows you to snipe every token presale on DxSale, Pinksale
     - [Wallet configuration](#wallet_configuration)
     - [Setting up target address](#target_address)
     - [Input validation](#input_validation)
+    - [Time of presale start](#time_settings)
+    - [Sniping starts](#sniping)
 
 
 
@@ -140,3 +142,24 @@ The bot asks for the target address (`presale address` in case of presale snipin
 <a name="input_validation"></a>
 #### 4. Input validation
 The bot checks if `private_key` and `target_address` are valid - if not, an error will be thrown and the bot will stop executing.
+
+<a name="time_settings"></a>
+#### 5. Time of presale start (only for _presale_ mode)
+The bot asks for time of presale start. </br>
+**Attention**: use your local time!
+
+<a name="sniping"></a>
+#### 6. Sniping starts
+The bot starts the sniping process and prompts the following message: </br>
+_Waiting for time to come..._
+
+Then, no message will be prompted until the triggering event happens; this means:
+* In _presale_ mode it waits for the first block whose `timestamp` is greater or equal to `trigger_time` (the time of presale start)
+* In _fairlaunch_ mode it waits for liquidity to be added
+
+When the triggering event happens the following message will be prompted: </br>
+_Bot armed._
+
+Then, if required, it will wait for the requested number of blocks before issuing the transaction to the blockchain resulting in one of the following final situation:
+* Transaction issued succesfully: the transaction hash is prompted
+* An error occurs: the error message is prompted
