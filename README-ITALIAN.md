@@ -148,7 +148,7 @@ Il bot chiede l'inserimento dell'indirizzo bersaglio, che chiameremo _target add
 
 <a name="input_validation"></a>
 #### 4. Validazione input
-Il bot controlla se la `private_key` ed il `target_address` dati sono validi - in caso non lo siano verrà lanciato un errore ed il bot terminerà la sua esecuzione.
+Il bot controlla se la `private_key` ed il `target_address` dati sono validi - in caso non lo siano verrà sollevato un errore ed il bot terminerà la sua esecuzione.
 
 <a name="time_settings"></a>
 #### 5. Orario di inizio della presale (solo per la modalità _presale_)
