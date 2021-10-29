@@ -23,7 +23,7 @@ This free-to-use bot allows you to snipe every token presale on DxSale, Pinksale
     - [Input validation](#input_validation)
     - [Time of presale start](#time_settings)
     - [Sniping starts](#sniping)
-
+  * _[Specifications](#specifics)_
 
 
 <a name="features"></a>
@@ -118,7 +118,7 @@ These commands are useful if you want to try the bot on the testnet:
   - sets number of delay blocks to **5** (antibot avoidance **ON**).
 
 _Notice: whether you have launched the bot with antibot avoidance on or off, you will always have the possibility to change the number of delay blocks (zero will result in the deactivation of the delay system for the current operation)_.
-
+</br></br></br>
 
 <a name="bot_interface"></a>
 ### Bot's user interface
@@ -163,3 +163,10 @@ _Bot armed._
 Then, if required, it will wait for the requested number of blocks before issuing the transaction to the blockchain resulting in one of the following final situation:
 * Transaction issued succesfully: the transaction hash is prompted
 * An error occurs: the error message is prompted
+</br>
+
+<a name="specifics"></a>
+### Specifications
+* `gas_amount`: maximum units of gas you want to use
+* `gas_price`: how much you want to pay the gas in **GWEI** per unit of gas (same unit of measurement as Metaask)
+* `gas_price`: the amount of BNB you want to send (thus **ETHER** as unit of measurement)
