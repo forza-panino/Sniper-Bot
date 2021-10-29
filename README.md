@@ -24,7 +24,8 @@ This free-to-use bot allows you to snipe every token presale on DxSale, Pinksale
     - [Time of presale start](#time_settings)
     - [Sniping starts](#sniping)
   * _[Specifications](#specifics)_
-
+* __[License](#license_link)__
+* __[Credits](#credits_link)__
 
 <a name="features"></a>
 ## Features
@@ -170,3 +171,12 @@ Then, if required, it will wait for the requested number of blocks before issuin
 * `gas_amount`: maximum units of gas you want to use
 * `gas_price`: how much you want to pay the gas in **GWEI** per unit of gas (same unit of measurement as Metaask)
 * `gas_price`: the amount of BNB you want to send (thus **ETHER** as unit of measurement)
+</br>
+
+<a name="license_link"></a>
+## License
+Check [LICENSE file](./LICENSE).
+
+<a name="credits_link"></a>
+## Credits
+Developed by @forza-panino for the telegram group [Spartan-Crypto](https://t.me/Spartancryptoita), main sponsor.
