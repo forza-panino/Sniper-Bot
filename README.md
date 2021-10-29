@@ -16,7 +16,11 @@ This free-to-use bot allows you to snipe every token presale on DxSale, Pinksale
   * _[Commands overview](#commands_overview)_
     - [normal use commands](#normal_commands)
     - [developing/testing-purpose commands](#dev_commands)
-
+  * _[Bot's user interface](#bot_interface)_
+    - [Initialization](#initialization)
+    - [Wallet configuration](#wallet_configuration)
+    - [Setting up target address](#target_address)
+    - [Input validation](#input_validation)
 
 
 
@@ -112,3 +116,27 @@ These commands are useful if you want to try the bot on the testnet:
   - sets number of delay blocks to **5** (antibot avoidance **ON**).
 
 _Notice: whether you have launched the bot with antibot avoidance on or off, you will always have the possibility to change the number of delay blocks (zero will result in the deactivation of the delay system for the current operation)_.
+
+
+<a name="bot_interface"></a>
+### Bot's user interface
+Setting up sniping details with this bot may be a little slow, redundant and slightly boring, but it is error-proof for the user.
+
+<a name="initialization"></a>
+#### 1. Initialization
+The bot loads the launch settings and shows them to the user. </br>
+The user will then be asked if he wants to change the number of delay blocks - in case of a positive answer the bot will require a new value to be prompted.
+
+<a name="wallet_configuration"></a>
+#### 2. Wallet configuration
+The bot searches for previous wallet configuration file:
+* if it doesn't exist, wallet configuration procedure will start and a new configuration file will be created - current new wallet settings will then be shown
+* if it does exist, the bot will show the current wallet settings and then asks for confirmation. </br> _Note: if you decide to change the current setting, the configuration file will be overwritten thus changes are permanent_
+
+<a name="target_address"></a>
+#### 3. Setting up target address
+The bot asks for the target address (`presale address` in case of presale sniping or `token address` in case of fairlaunch sniping).
+
+<a name="input_validation"></a>
+#### 4. Input validation
+The bot checks if `private_key` and `target_address` are valid - if not, an error will be thrown and the bot will stop executing.
