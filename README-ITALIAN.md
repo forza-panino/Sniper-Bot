@@ -15,6 +15,16 @@ Un bot gratuito da usare che consente lo sniping delle presale che avvengono su 
   * _[Comandi disponibili](#commands_overview)_
     - [comandi per il normale utilizzo](#normal_commands)
     - [comandi per scopi di developing o testing](#dev_commands)
+  * _[Interfaccia utente del bot](#bot_interface)_
+    - [Inizializzazione](#initialization)
+    - [Configurazione del wallet](#wallet_configuration)
+    - [Impostazione dell'indirizzo bersaglio](#target_address)
+    - [Validazione input](#input_validation)
+    - [Orario di inizio della presale](#time_settings)
+    - [Avvio dello sniping](#sniping)
+  * _[Specifiche tecniche](#specifics)_
+* __[Licenza](#license_link)__
+* __[Crediti](#credits_link)__
 
 
 
@@ -113,3 +123,67 @@ Questi comandi sono utili se vuoi provare il bot sulla testnet:
 
 
 _Nota: Sia che tu abbia avviato il bot con l'elusione dei sistemi antibot attiva o disattiva, avrai sempre la possibilità di cambiare il numero dei blocchi di ritardo (zero risulterà nella disattivazione della funzionalità per l'operazione in corso)_.
+</br></br></br>
+
+<a name="bot_interface"></a>
+### Interfaccia utente del bot
+Impostare i vari dettagli con questo bot può risultare un po' lento, ridondante e leggermente noioso, ma evita il più possibile eventuali errori dell'utente.
+
+<a name="initialization"></a>
+#### 1. Inizializzazione
+Il bot carica le impostazioni di lancio e le mostra all'utente.</br>
+A quest'ultimo verrà poi chiesto se vuole cambiare il numero di blocchi d'attesa - in caso di risposta positiva il bot necessiterà l'inserimento del nuovo valore.
+
+
+<a name="wallet_configuration"></a>
+#### 2. Configurazione del wallet
+Il bot cerca un eventuale file di configurazione preesistente:
+* Se non esiste, verrà cominiciata la procedura di configurazione del wallet ed un nuovo file verrà creato - verrà infine mostrata la nuova configurazione.
+* Se esiste, il bot mostrerà la configurazione corrente e chiederà conferma.</br> _Nota: se decidi di cambiare le impostazioni correnti il file di configurazione verrà sovrascritto: i cambiamenti saranno, cioè, permanenti_
+
+
+<a name="target_address"></a>
+#### 3. Impostazione dell'indirizzo bersaglio
+Il bot chiede l'inserimento dell'indirizzo bersaglio, che chiameremo _target address_ (bisogna copiare il `presale address` in caso si stesse effettuando lo sniping di una presale oppure il `token address` nel caso di fairlaunch).
+
+<a name="input_validation"></a>
+#### 4. Validazione input
+Il bot controlla se la `private_key` ed il `target_address` dati sono validi - in caso non lo siano verrà lanciato un errore ed il bot terminerà la sua esecuzione.
+
+<a name="time_settings"></a>
+#### 5. Orario di inizio della presale (solo per la modalità _presale_)
+Il bot chiede l'inserimento dell'orario di inizio della presale. </br>
+**Attenzione**: usare l'orario locale!
+
+<a name="sniping"></a>
+#### 6. Avvio dello sniping
+Il bot avvia il processo di sniping e mostra il seguente messaggio: </br>
+_Attendendo l'orario di inizio.._
+
+
+Successivamente, non verrà mostrato alcun messaggio finché non avviene un evento di attivazione; ciò significa:
+* In modalità _presale_ aspetta il primo blocco il cui `timestamp` è maggiore od uguale al `trigger_time` (l'orario di inizio della presale)
+* In modalità _fairlaunch_ aspetta che la liquidità venga immessa
+
+Quando avviene uno di questi due eventi viene mostrato il seguente messaggio: </br>
+_Bot armato._
+
+Successivamente, se richiesto, aspetterà un numero di blocchi pari a quello impostato prima di emettere la transazione sulla blockchain, per poi concludere con una di queste due situazioni finali:
+* Transazione emessa con successo: viene mostrata il transaction hash associato ad essa
+* Si verifica un errore: viene mostrato il messaggio di errore
+</br>
+
+<a name="specifics"></a>
+### Specifiche tecniche
+* `gas_amount`: il numero massimo di unità di gas che si intende usare
+* `gas_price`: quanto si intende pagare il gas in **GWEI** per unità di gas (stessa unità di misura di MetaMask)
+* `gas_price`: l'ammontare di BNB che si intende inviare (quindi **ETHER** come unità di misura)
+</br>
+
+<a name="license_link"></a>
+## Licenza
+Controlla il [LICENSE file](./LICENSE).
+
+<a name="credits_link"></a>
+## Crediti
+Sviluppato da @forza-panino per il gruppo telegram [Spartan-Crypto](https://t.me/Spartancryptoita), sponsor principale.
