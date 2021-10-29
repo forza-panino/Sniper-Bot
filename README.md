@@ -48,7 +48,7 @@ This free-to-use bot allows you to snipe every token presale on DxSale, Pinksale
 * NodeJS
 
 ### Requirements installation guide
-You can install NodeJS through the [official installer](https://nodejs.org/en/download/) (be sure to select *LTS* and **not** *current*); if you're using Linux or another OS instead of Windows or macOS than, [as per documentation](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm), it is reccomended to use [NodeSource installer](https://github.com/nodesource/distributions).
+You can install NodeJS through the [official installer](https://nodejs.org/en/download/) (be sure to select *LTS* and **not** *current*); if you're using Linux or another OS instead of Windows or macOS then, [as per documentation](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm), it is reccomended to use [NodeSource installer](https://github.com/nodesource/distributions).
  </br>NPM will be automatically installed along with NodeJS.
 
 <a name="installation_guide"></a>
@@ -74,7 +74,7 @@ You can install NodeJS through the [official installer](https://nodejs.org/en/do
 
 <a name="commands_overview"></a>
 ### Commands overview
-Once you have insalled everything correctly you can start the bot using a terminal opened inside the project folder and digiting one of the following commands:
+Once you have installed everything correctly you can start the bot using a terminal opened inside the project folder and digiting one of the following commands:
 
 <a name="normal_commands"></a>
 #### Normal use commands
@@ -133,8 +133,8 @@ The user will then be asked if he wants to change the number of delay blocks - i
 <a name="wallet_configuration"></a>
 #### 2. Wallet configuration
 The bot searches for previous wallet configuration file:
-* if it doesn't exist, wallet configuration procedure will start and a new configuration file will be created - current new wallet settings will then be shown
-* if it does exist, the bot will show the current wallet settings and then asks for confirmation. </br> _Note: if you decide to change the current setting, the configuration file will be overwritten thus changes are permanent_
+* if it doesn't exist, wallet configuration procedure will start and a new configuration file will be created - the new wallet settings will then be shown
+* if it does exist, the bot will show the current wallet settings and then asks for confirmation. </br> _Note: if you decide to change the current settings, the configuration file will be overwritten thus changes are permanent_
 
 <a name="target_address"></a>
 #### 3. Setting up target address
@@ -169,7 +169,7 @@ Then, if required, it will wait for the requested number of blocks before issuin
 <a name="specifics"></a>
 ### Specifications
 * `gas_amount`: maximum units of gas you want to use
-* `gas_price`: how much you want to pay the gas in **GWEI** per unit of gas (same unit of measurement as Metaask)
+* `gas_price`: how much you want to pay the gas in **GWEI** per unit of gas (same unit of measurement as MetaMask)
 * `gas_price`: the amount of BNB you want to send (thus **ETHER** as unit of measurement)
 </br>
 
