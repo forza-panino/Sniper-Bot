@@ -1,7 +1,7 @@
 {
   "name": "bsc_bot",
   "version": "1.0.0",
-  "description": "",
+  "description": "This free-to-use bot allows you to snipe every token presale on DxSale, Pinksale or any other BSC platform where you have to send BNB to some presale address.",
   "main": "out/main.js",
   "scripts": {
     "install": "npm install typescript --save-dev && npm install web3",
@@ -20,8 +20,7 @@
     "error-testing-4": "npm run compile && node build/main.js -presale -delay=3,4"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "GitHub user @forza-panino",
   "dependencies": {
     "web3": "^1.6.0"
   },
