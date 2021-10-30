@@ -4,13 +4,13 @@
   "description": "This free-to-use bot allows you to snipe every token presale on DxSale, Pinksale or any other BSC platform where you have to send BNB to some presale address.",
   "main": "out/main.js",
   "config": {
-    "language": "en"
+    "language": "it"
   },
   "scripts": {
     "install": "npm install typescript --save-dev && npm install web3",
     "compile": "npx tsc",
-    "set-italian-language": "node src/language_pack/language_selector.js -it",
-    "set-english-language": "node src/language_pack/language_selector.js -en",
+    "set-italian-language": "node -e \"let pkg=require('./package.json'); pkg.config.language='it'; require('fs').writeFileSync('package.json', JSON.stringify(pkg, null, 2));\"",
+    "set-english-language": "node -e \"let pkg=require('./package.json'); pkg.config.language='en'; require('fs').writeFileSync('package.json', JSON.stringify(pkg, null, 2));\"",
     "mainnet-presale": "npm run compile && node build/main.js -presale",
     "testnet-presale": "npm run compile && node build/main.js -testnet -presale",
     "mainnet-fairlaunch": "npm run compile && node build/main.js -fairlaunch",
