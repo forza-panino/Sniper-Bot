@@ -13,6 +13,7 @@ This free-to-use bot allows you to snipe every token presale on DxSale, Pinksale
   * [requirements](#requirements)
   * [installation guide](#installation_guide)
 * __[Bot guide](#bot_guide)__
+  * _[Setting up language](#language_setting)_
   * _[Commands overview](#commands_overview)_
     - [normal use commands](#normal_commands)
     - [developing/testing-purpose commands](#dev_commands)
@@ -70,6 +71,13 @@ You can install NodeJS through the [official installer](https://nodejs.org/en/do
 
 <a name="bot_guide"></a>
 ## Bot guide
+
+
+<a name="language_setting"></a>
+### Setting up language
+The bot supports both English and Italian language. To set it up open a terminal inside the project folder than choose your language running one of the following commands:
+* `npm run set-english-language`: sets bot's language to English
+* `npm run set-italian-language`: sets bot's language to Italian
 
 
 <a name="commands_overview"></a>
