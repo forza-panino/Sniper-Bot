@@ -158,7 +158,7 @@ Il bot chiede l'inserimento dell'orario di inizio della presale. </br>
 <a name="sniping"></a>
 #### 6. Avvio dello sniping
 Il bot avvia il processo di sniping e mostra il seguente messaggio: </br>
-_Attendendo l'orario di inizio.._
+_Attendendo l'orario di inizio..._
 
 
 Successivamente, non verrà mostrato alcun messaggio finché non avviene un evento di attivazione; ciò significa:

@@ -1,3 +1,4 @@
+import language from "./language_pack/selected_language"
 import cfgh from "./configs_handler"
 import * as readline from 'readline';
 import { stdin as input, stdout as output } from 'process';
@@ -33,25 +34,25 @@ function init() {
                 break;
             case '-presale':
                 if (mode.has('fairlaunch') && mode.get('fairlaunch'))
-                    throw new Error("Cannot activate both presale and fairlaunch mode!");
+                    throw new Error(language.lang.BOTH_MODE_NOT_PERMITTED);
                 mode.set('fairlaunch', false);
                 mode.set('presale', true);
                 break;
             case '-fairlaunch':
                 if (mode.has('presale') && mode.get('presale'))
-                    throw new Error("Cannot activate both presale and fairlaunch mode!");
+                    throw new Error(language.lang.BOTH_MODE_NOT_PERMITTED);
                 mode.set('fairlaunch', true);
                 mode.set('presale', false);
                 break;
             case '-delay':
                 let inp : string = value.split("=")[1];
                 if (isNaN(parseInt(inp)) || inp.includes('.') || inp.includes(","))
-                    throw new Error("You must pass an int (number of blocks) as delay value!");
+                    throw new Error(language.lang.INVALID_DELAY_OPTION);
                 mode.set('delay', parseInt(inp));
                 break;
             default:
                 console.log(value);
-                throw new Error("An error occurred while reading options. Please check documentation.");
+                throw new Error(language.lang.OPTIONS_ERROR);
     
         }
         
@@ -59,7 +60,7 @@ function init() {
 
     //FAIRLAUNCH NOT AVAILABLE
     if (mode.get('fairlaunch')) {
-        console.log("\x1b[31mSorry, fairlaunch mode is still under development.\x1b[0m");
+        console.log("\x1b[31m" + language.lang.FAIR_TBD + "\x1b[0m");
         process.exit();
 }
 }
@@ -69,10 +70,10 @@ function init() {
  * Shows current bot settings.
  */
 function showCurrentBotSettings() {
-    console.log("You have launched the bot with the following settings: ");
-    console.log("\x1b[33mMode: \x1b[32m%s", mode.get('fairlaunch') ? 'fairlaunch' : 'presale');
-    console.log("\x1b[33mDelay: \x1b[3%dm%s", mode.get('delay') ? 2 : 1 ,mode.get('delay') ? 'on (' + mode.get('delay') + ' blocks)' : 'off');
-    console.log("\x1b[33mNet: \x1b[3%sm%s",  mode.get('testnet') ? 1 : 2, (mode.get('testnet') ? 'testnet' : 'mainnet') + '\x1b[0m' );
+    console.log(language.lang.SHOW_BOT_SETTINGS);
+    console.log("\x1b[33m" + language.lang.MODE + ": \x1b[32m%s", mode.get('fairlaunch') ? 'fairlaunch' : 'presale');
+    console.log("\x1b[33m" + language.lang.DELAY + ": \x1b[3%dm%s", mode.get('delay') ? 2 : 1 ,mode.get('delay') ? 'on (' + mode.get('delay') + ' '+ language.lang.BLOCKS + ')' : 'off');
+    console.log("\x1b[33m" + language.lang.NET + ": \x1b[3%sm%s",  mode.get('testnet') ? 1 : 2, (mode.get('testnet') ? 'testnet' : 'mainnet') + '\x1b[0m' );
 }
 
 /**
@@ -81,7 +82,7 @@ function showCurrentBotSettings() {
  */
 async function delayConfig() {
     const rl = readline.createInterface({ input, output });
-    rl.setPrompt("Do you want to change number of delay blocks? (y/n): ");
+    rl.setPrompt(language.lang.CHANGE_DELAY);
     rl.prompt();
     var asking_confirmation : boolean = true;
     var changing : boolean = false;
@@ -90,12 +91,12 @@ async function delayConfig() {
 
         if (changing && !asking_confirmation) {
             if (isNaN(parseInt(line)) || line.includes('.') || line.includes(",")){
-                rl.setPrompt("Only integers accepted. Insert number of delay blocks: ");
+                rl.setPrompt(language.lang.INVALID_DELAY_INPUT);
                 rl.prompt();
                 continue;
             }
             answer = parseInt(line);
-            rl.setPrompt("You digited " + answer + ". Confirm? (y/n): ");
+            rl.setPrompt(language.lang.YOU_DIGITED + answer + language.lang.CONFIRM);
             rl.prompt();
             asking_confirmation = true;
             continue;
@@ -107,24 +108,24 @@ async function delayConfig() {
                     if(!changing) {
                         changing = true;
                         asking_confirmation = false;
-                        rl.setPrompt("Insert number of delay blocks: ");
+                        rl.setPrompt(language.lang.INSERT_DELAY);
                         rl.prompt();
                         continue;
                     }
                     mode.set('delay', answer);
-                    console.log("\x1b[33mDelay blocks number has been changed to %d\x1b[0m", answer);
+                    console.log("\x1b[33m" + language.lang.DELAY_CHANGED + "%d\x1b[0m", answer);
                     return;
                 case 'n':
                     if (!changing) {
-                        console.log("\x1b[33mDelay blocks number has not been changed\x1b[0m");
+                        console.log("\x1b[33m" + language.lang.DELAY_NOT_CHANGED + "\x1b[0m");
                         return;
                     }
-                    rl.setPrompt("Insert number of delay blocks: ");
+                    rl.setPrompt(language.lang.INSERT_DELAY);
                     rl.prompt();
                     asking_confirmation = false;
                     break;
                 default:
-                    rl.setPrompt("digit only y or n: ");
+                    rl.setPrompt(language.lang.ONLY_Y_OR_N);
                     rl.prompt();
                     break;
             }
@@ -154,32 +155,32 @@ async function walletConfig() {
     async function startWalletConfiguration() {
         await cfgh.createConfigsFile()
         if (cfgh.configsFileExist()) {
-            console.log("\nHere's the new wallet configuration:");
+            console.log("\n" + language.lang.SHOW_NEW_WALLET_CONF);
             showWalletConfig();
         }
         else {
-            throw new Error("It seems tha something went wrong during the wallet configuration.");
+            throw new Error(language.lang.WALLET_CONFIG_ERROR);
         }    
     }
     
-    console.log('\n\x1b[36mChecking wallet configuration...\x1b[0m');
+    console.log('\n\x1b[36m' + language.lang.CHECKING_WALLET_CONF + '\x1b[0m');
     if (cfgh.configsFileExist()) {
-        console.log("Found the following wallet configuration: ");
+        console.log(language.lang.WALLET_CONFIG_FOUND);
         showWalletConfig();
         const rl = readline.createInterface({ input, output });
-        rl.setPrompt("Do you want to change wallet configuration? (y/n): ");
+        rl.setPrompt(language.lang.CHANGE_WALLET_CONF);
         rl.prompt();
         for await (let line of rl) {
             switch(line.toLowerCase()) {
                 case 'y':
                     rl.close();
-                    console.log("Starting configuration procedure now.\n");
+                    console.log(language.lang.STARTING_WALLET_CONF + "\n");
                     await startWalletConfiguration();
                     return;
                 case 'n':
                     return;
                 default:
-                    rl.setPrompt("digit only y or n: ");
+                    rl.setPrompt(language.lang.ONLY_Y_OR_N);
                     rl.prompt();
                     break;
             }

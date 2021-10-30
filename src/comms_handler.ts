@@ -1,3 +1,4 @@
+import language from "./language_pack/selected_language"
 const Web3 = require('web3');
 
 class CommsHandler {
@@ -40,7 +41,7 @@ class CommsHandler {
     public setTargetContract(target_contract : string) : void {
 
         if (!this.web3.utils.isAddress(target_contract))
-            throw new Error("Address is not valid.");
+            throw new Error(language.lang.ADDR_NOT_VALID);
             
         this.target_contract = target_contract;
     }
@@ -71,7 +72,7 @@ class CommsHandler {
 
         private_keys.forEach( (key : string) => {
             if (!this.verifyPrivateKey(key))
-                throw new Error("A key is not valid.");
+                throw new Error(language.lang.PVT_KEY_NOT_VALID);
         })
 
         this.private_keys = this.private_keys.concat(private_keys);

@@ -1,3 +1,4 @@
+import language from "./language_pack/selected_language"
 const fs = require('fs');
 const path = require('path');
 import * as readline from 'readline';
@@ -35,7 +36,7 @@ async function createConfigsFile() : Promise<boolean> {
     var i : number = 0;
     var asking_confirmation : boolean = false;
     var answer : string = "";
-    rl.setPrompt("Insert " + configuration_fields[i] + ": ");
+    rl.setPrompt(language.lang.INSERT + configuration_fields[i] + ": ");
     rl.prompt();
     for await (let line of rl) {
 
@@ -48,7 +49,7 @@ async function createConfigsFile() : Promise<boolean> {
                     asking_confirmation = false;
                     answer = "";
                     if ( i < configuration_fields.length) {
-                        rl.setPrompt("\nInsert " + configuration_fields[i] + ": ");
+                        rl.setPrompt("\n" + language.lang.INSERT + configuration_fields[i] + ": ");
                         rl.prompt();
                     }
                     else
@@ -56,11 +57,11 @@ async function createConfigsFile() : Promise<boolean> {
                     break;
                 case 'n':
                     asking_confirmation = false;
-                    rl.setPrompt("Insert " + configuration_fields[i] + ": ");
+                    rl.setPrompt(language.lang.INSERT + configuration_fields[i] + ": ");
                     rl.prompt();
                     break;
                 default:
-                    rl.setPrompt("digit only y or n: ");
+                    rl.setPrompt(language.lang.ONLY_Y_OR_N);
                     rl.prompt();
                     break;
             }
@@ -70,7 +71,7 @@ async function createConfigsFile() : Promise<boolean> {
         rl.pause();
         answer = line;
         asking_confirmation = true;
-        rl.setPrompt("You digited: " + answer +"\nDo you confirm? y/n: ");
+        rl.setPrompt(language.lang.YOU_DIGITED + answer +"\n" + language.lang.CONFIRM);
         rl.prompt();
     }
     

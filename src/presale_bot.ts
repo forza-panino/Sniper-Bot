@@ -1,3 +1,4 @@
+import language from "./language_pack/selected_language"
 import { CommsHandler } from "./comms_handler";
 
 class PresaleBot {
@@ -49,14 +50,13 @@ class PresaleBot {
      * @param {Error} error error - if any - issuing the transaction.
      * @param {result} result transaction hash - if successfull.
      */
-
     private sendTxCallback(error : Error, result : string) {
         if (error) {
-            console.log("The following error occurred: ");
+            console.log(language.lang.ERROR_OCCURRED);
             console.log(error);
         }
         else 
-            console.log("\x1b[32mTransaction sent successfully. \n\x1b[33mTransacion hash: \x1b[0m%s", result);
+            console.log("\x1b[32m" + language.lang.TRANSACTION_SUCCESSFUL + "\n\x1b[33m" + language.lang.TX_HASH + "\x1b[0m%s", result);
         
     }
 
@@ -68,7 +68,7 @@ class PresaleBot {
         this.comms_handler.prepareTXs();
         var target_block : number;
         var time_triggered : boolean = false;
-        console.log("Waiting for time to come...");
+        console.log(language.lang.WAITING);
         var checker = this.comms_handler.subscribeNewBlocks(
             function (current_block : any) {                
                 if (!time_triggered) {
@@ -80,7 +80,7 @@ class PresaleBot {
                             return;
                         }
                         target_block = current_block['number'] + this.delay;
-                        console.log("Bot armed.");                        
+                        console.log(language.lang.ARMED);                        
                     }             
                 }
                 else {

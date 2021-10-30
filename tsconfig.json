@@ -14,6 +14,9 @@
       "src/configs_handler.ts",
       "src/presale_bot.ts",
       "src/bot_initialization.ts",
-      "src/main.ts"
+      "src/main.ts",
+      "src/language_pack/italian.ts",
+      "src/language_pack/english.ts",
+      "src/language_pack/selected_language.ts",
     ]
   }
