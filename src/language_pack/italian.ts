@@ -9,9 +9,9 @@ const lang = {
     NET: "Net",
     BLOCKS: "blocchi",
     CHANGE_DELAY: "Vuoi cambiare il numero di blocchi di attesa? (y/n): ",
-    INVALID_DELAY_INPUT: "Only integers accepted. Insert number of delay blocks: ",
+    INVALID_DELAY_INPUT: "Ammessi solo numeri interi. Inserire numero di blocchi di attesa: ",
     YOU_DIGITED: "Hai digitato ",
-    CONFIRM: ". Confermi? (y/n): ",
+    CONFIRM: "Confermi? (y/n): ",
     INSERT_DELAY: "Inserire numero di blocchi di attesa: ",
     DELAY_CHANGED: "Numero di blocchi di attesa cambiato a ",
     DELAY_NOT_CHANGED: "Numero di blocchi di attesa non cambiato.",
@@ -37,7 +37,8 @@ const lang = {
     ERROR_OCCURRED: "Si è sollevato il seguente errore: ",
     TRANSACTION_SUCCESSFUL: "Transazione emessa con successo. ",
     TX_HASH: "Hash della transazione: ",
-    WAITING: "Waiting for time to come...",
-    ARMED: "Bot armato."
+    WAITING: "Attendendo l'orario di inizio...",
+    ARMED: "Bot armato.",
+    ASK_TARGET_ADDR: "Inserire indirizzo bersaglio: ",
 };
 export default {lang}

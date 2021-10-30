@@ -96,7 +96,7 @@ async function delayConfig() {
                 continue;
             }
             answer = parseInt(line);
-            rl.setPrompt(language.lang.YOU_DIGITED + answer + language.lang.CONFIRM);
+            rl.setPrompt(language.lang.YOU_DIGITED + answer + ". " + language.lang.CONFIRM);
             rl.prompt();
             asking_confirmation = true;
             continue;

@@ -11,7 +11,7 @@ const lang = {
     CHANGE_DELAY: "Do you want to change number of delay blocks? (y/n): ",
     INVALID_DELAY_INPUT: "Only integers accepted. Insert number of delay blocks: ",
     YOU_DIGITED: "You digited ",
-    CONFIRM: ". Confirm? (y/n): ",
+    CONFIRM: "Confirm? (y/n): ",
     INSERT_DELAY: "Insert number of delay blocks: ",
     DELAY_CHANGED: "Delay blocks number has been changed to ",
     DELAY_NOT_CHANGED: "Delay blocks number has not been changed.",
@@ -37,7 +37,8 @@ const lang = {
     ERROR_OCCURRED: "The following error occurred: ",
     TRANSACTION_SUCCESSFUL: "Transaction sent successfully. ",
     TX_HASH: "Transacion hash: ",
-    WAITING: "Attendendo l'orario di inizio...",
-    ARMED: "Bot armed."
+    WAITING: "Waiting for time to come...",
+    ARMED: "Bot armed.",
+    ASK_TARGET_ADDR: "Insert target address: ",
 };
 export default {lang}

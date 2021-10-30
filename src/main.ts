@@ -6,7 +6,7 @@ import {PresaleBot} from "./presale_bot"
 
 async function askTargetAddress() : Promise<string> {
     const rl = readline.createInterface({ input, output });
-    rl.setPrompt("Insert target address: ");
+    rl.setPrompt(language.lang.ASK_TARGET_ADDR);
     rl.prompt();
     var answer : string;
     var asking_confirmation : boolean = false;
@@ -17,18 +17,18 @@ async function askTargetAddress() : Promise<string> {
                     return answer;
                 case 'n':
                     asking_confirmation = false;
-                    rl.setPrompt("Insert target address: ");
+                    rl.setPrompt(language.lang.ASK_TARGET_ADDR);
                     rl.prompt();
                     continue;
                 default:
-                    rl.setPrompt("digit only y or n: ");
+                    rl.setPrompt(language.lang.ONLY_Y_OR_N);
                     rl.prompt();
                     continue;
             }
         }
         answer = line;
         asking_confirmation = true;
-        rl.setPrompt("You digited: " + answer + "\nDo You confirm? (y/n): ");
+        rl.setPrompt(language.lang.YOU_DIGITED + answer + "\n" + language.lang.CONFIRM);
         rl.prompt();
     }
 }
