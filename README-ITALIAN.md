@@ -12,6 +12,7 @@ Un bot gratuito da usare che consente lo sniping delle presale che avvengono su 
   * [requisiti](#requirements)
   * [guida all'installazione](#installation_guide)
 * __[Guida del bot](#bot_guide)__
+  * _[Impostare la lingua](#language_setting)_
   * _[Comandi disponibili](#commands_overview)_
     - [comandi per il normale utilizzo](#normal_commands)
     - [comandi per scopi di developing o testing](#dev_commands)
@@ -72,6 +73,12 @@ Puoi installare NodeJS tramite l'[installer ufficiale](https://nodejs.org/en/dow
 
 <a name="bot_guide"></a>
 ## Guida del bot
+
+<a name="language_setting"></a>
+### Impostare la lingua
+Il bot supporta sia la lingua italiana che quella inglese. Per impostarla apri un terminale all'interno della cartella del progetto ed esegui uno dei seguenti comandi:
+* `npm run set-english-language`: imposta la lingua inglese
+* `npm run set-italian-language`: imposta la lingua italiana
 
 
 <a name="commands_overview"></a>
