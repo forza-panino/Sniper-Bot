@@ -40,6 +40,5 @@ const lang = {
     WAITING: "Attendendo l'orario di inizio...",
     ARMED: "Bot armato.",
     ASK_TARGET_ADDR: "Inserire indirizzo bersaglio: ",
-    TODAY_OR_TOMORROW: "Il bot effettuerà lo sniping oggi all'ora selezionata. Vuoi invece impostarlo per effettuare lo sniping domani? (y/n): "
 };
 export default {lang}
