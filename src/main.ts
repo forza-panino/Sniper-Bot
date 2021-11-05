@@ -116,6 +116,25 @@ async function askTriggerTime() : Promise<Date> {
         rl.prompt();
     }
 
+    rl = readline.createInterface({ input, output });
+    rl.setPrompt(language.lang.TODAY_OR_TOMORROW);
+    rl.prompt();
+    for await (let line of rl) {
+        switch (line.toLowerCase()) {
+            case 'y':
+                trigger_time.setDate(trigger_time.getDate() + 1);
+                break;
+            case 'n':
+                break;
+            default:
+                rl.setPrompt(language.lang.ONLY_Y_OR_N);
+                rl.prompt();
+                continue;
+        }
+        break;
+    }
+
+
     return new Date(trigger_time.toUTCString());
 }
 

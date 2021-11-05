@@ -40,5 +40,6 @@ const lang = {
     WAITING: "Waiting for time to come...",
     ARMED: "Bot armed.",
     ASK_TARGET_ADDR: "Insert target address: ",
+    TODAY_OR_TOMORROW: "The bot will snipe at the given time today. Do you want to set it to snipe tomorrow instead? (y/n): "
 };
 export default {lang}
