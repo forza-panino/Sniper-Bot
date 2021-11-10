@@ -146,13 +146,21 @@ class CommsHandler {
         var previous_block : number;        
         return setInterval(
             async function (){
-                let current_block : number = await this.web3.eth.getBlockNumber();
-                if (current_block > previous_block || previous_block == undefined) {
-                    previous_block = current_block;
-                    callback(await this.web3.eth.getBlock('latest'));
+                try {
+                    let current_block : number = await this.web3.eth.getBlockNumber();
+                    if (current_block > previous_block || previous_block == undefined) {
+                        previous_block = current_block;
+                        callback(await this.web3.eth.getBlock('latest'));
+                    }
+                } catch (err : any) {
+                    console.warn("====================" + language.lang.BLOCK_QUERY_ERR + "====================");
+                    console.warn(err);
+                    console.warn("====================" + language.lang.EOR + "====================");
+                    console.warn(language.lang.SHOULD_NOT_INTERFER);
                 }
+                
             }.bind(this)
-            , 10
+            , 100
         ) ;
 
     }

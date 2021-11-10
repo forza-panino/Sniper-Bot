@@ -40,6 +40,9 @@ const lang = {
     WAITING: "Attendendo l'orario di inizio...",
     ARMED: "Bot armato.",
     ASK_TARGET_ADDR: "Inserire indirizzo bersaglio: ",
-    TODAY_OR_TOMORROW: "Il bot effettuerà lo sniping oggi all'ora selezionata. Vuoi invece impostarlo per effettuare lo sniping domani? (y/n): "
+    TODAY_OR_TOMORROW: "Il bot effettuerà lo sniping oggi all'ora selezionata. Vuoi invece impostarlo per effettuare lo sniping domani? (y/n): ",
+    BLOCK_QUERY_ERR: "C'è stato un errore nella richiesta del blocco",
+    EOR: "Fine errore",
+    SHOULD_NOT_INTERFER: "NOTA: Se l'errore viene sollevato occasionalmente il bot dovrebbe poter ancora continuare a lavorare in tranquillità."
 };
 export default {lang}
