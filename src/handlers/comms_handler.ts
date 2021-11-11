@@ -1,4 +1,4 @@
-import language from "./language_pack/selected_language"
+import language from "../language_pack/selected_language"
 const Web3 = require('web3');
 
 class CommsHandler {

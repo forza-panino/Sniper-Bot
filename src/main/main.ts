@@ -1,8 +1,8 @@
-import language from "./language_pack/selected_language"
+import language from "../language_pack/selected_language"
 import bot_init from "./bot_initialization"
 import * as readline from 'readline';
 import { stdin as input, stdout as output } from 'process';
-import {PresaleBot} from "./presale_bot"
+import {PresaleBot} from "../bots/presale_bot"
 
 async function askTargetAddress() : Promise<string> {
     const rl = readline.createInterface({ input, output });

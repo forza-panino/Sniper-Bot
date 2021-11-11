@@ -1,5 +1,5 @@
-import language from "./language_pack/selected_language"
-import cfgh from "./configs_handler"
+import language from "../language_pack/selected_language"
+import cfgh from "../handlers/configs_handler"
 import * as readline from 'readline';
 import { stdin as input, stdout as output } from 'process';
 const fs = require('fs');

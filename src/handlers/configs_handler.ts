@@ -1,4 +1,4 @@
-import language from "./language_pack/selected_language"
+import language from "../language_pack/selected_language"
 const fs = require('fs');
 const path = require('path');
 import * as readline from 'readline';
