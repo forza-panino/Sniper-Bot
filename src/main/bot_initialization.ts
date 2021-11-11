@@ -14,8 +14,8 @@ mode.set('delay', 0); //no delay by default
  * Shows logo and credits banner.
  */
 function welcome() {
-    console.log(fs.readFileSync(path.join(__dirname, "..", "assets", "logo.ans")).toString());
-    console.log(fs.readFileSync(path.join(__dirname, "..", "assets", "credits.ans")).toString());
+    console.log(fs.readFileSync(path.join(__dirname, "..", "..", "assets", "logo.ans")).toString());
+    console.log(fs.readFileSync(path.join(__dirname, "..", "..", "assets", "credits.ans")).toString());
 
     console.log("a"); //Cannot understand why it is needed, otherwise first log lacks two letters. Might be some ansi issue.
 }
