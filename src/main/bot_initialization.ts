@@ -60,7 +60,7 @@ function init() {
     //FAIRLAUNCH NOT AVAILABLE
     if (mode.get('fairlaunch')) {
         console.log("\x1b[31m" + language.lang.FAIR_TBD + "\x1b[0m");
-        process.exit();
+        process.exit(10);
 }
 }
 
