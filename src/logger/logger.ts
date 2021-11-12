@@ -5,7 +5,6 @@ class logger {
     private readonly path = "./logs/";
     private readonly filetimestamp : Logger.FileTimestamp;
     private readonly full_path : string;
-    private readonly logstream : WritableStream;
 
     private static instance : logger;
 
@@ -24,34 +23,52 @@ class logger {
         var isTargetTimeDisplayed : boolean = false;
         var fatalError : boolean = false;
 
-        (this.logstream as any).write("\n");
+        fs.appendFileSync(this.full_path, "\n");
 
         if (exiting) {
-            if (fatalError)
-                (this.logstream as any).write("\n\nEnd of Log (Terminated with fatal error).");
-            else {
-                if (process.env.npm_package_debug)
-                    (this.logstream as any).write("\n\nEnd of Log (Terminated with no fatal error - log generated because of debug mode on).");
+            console.log("called");
+            console.log(fatalError);
+            
+            
+            if (fatalError) {
+                console.log("fatak");
+                
+                fs.appendFileSync(this.full_path, "\n\nEnd of Log (Terminated with fatal error).");
             }
-            this.logstream.close();
+            else {
+                console.log("not fatal");
+                
+                if (process.env.npm_package_debug)
+                    fs.appendFileSync(this.full_path, "\n\nEnd of Log (Terminated with no fatal error - log generated because of debug mode on).");
+            }
             return;
         }
 
         if (error) {
             if (error.caught) {
-                (this.logstream as any).write(error.timestamp + "\t" + "===CAUGHT error===");
-                (this.logstream as any).write(error.error.name);
-                (this.logstream as any).write(error.error.message);
-                (this.logstream as any).write(error.error.stack ? error.error.stack : "stack not available.");
-                (this.logstream as any).write("===END OF ERROR===");
+                fs.appendFileSync(this.full_path, error.timestamp + "\t" + "===CAUGHT error===");
+                fs.appendFileSync(this.full_path, "\n");
+                fs.appendFileSync(this.full_path, error.error.name);
+                fs.appendFileSync(this.full_path, "\n");
+                fs.appendFileSync(this.full_path, error.error.message);
+                fs.appendFileSync(this.full_path, "\n");
+                fs.appendFileSync(this.full_path, error.error.stack ? error.error.stack : "stack not available.");
+                fs.appendFileSync(this.full_path, "\n");
+                fs.appendFileSync(this.full_path, "===END OF ERROR===");
             }
             else {
-                (this.logstream as any).write(error.timestamp + "\t" + "===UNCAUGHT error===");
-                (this.logstream as any).write(error.error.name);
-                (this.logstream as any).write(error.error.message);
-                (this.logstream as any).write(error.error.stack ? error.error.stack : "stack not available.");
-                (this.logstream as any).write("===END OF ERROR===");
+                fs.appendFileSync(this.full_path, error.timestamp + "\t" + "===UNCAUGHT error===");
+                fs.appendFileSync(this.full_path, "\n");
+                fs.appendFileSync(this.full_path, error.error.name);
+                fs.appendFileSync(this.full_path, "\n");
+                fs.appendFileSync(this.full_path, error.error.message);
+                fs.appendFileSync(this.full_path, "\n");
+                fs.appendFileSync(this.full_path, error.error.stack ? error.error.stack : "stack not available.");
+                fs.appendFileSync(this.full_path, "\n");
+                fs.appendFileSync(this.full_path, "===END OF ERROR===");
                 fatalError = true;
+                console.log(fatalError);
+                
                 logger.getInstance().update(null, true);
             }
             return;
@@ -59,7 +76,7 @@ class logger {
 
         if (!isBotSettingsDisplayed) {
             if (this.bot_settings) {
-                (this.logstream as any).write(this.bot_settings.notification_time + "\t" + this.bot_settings.settings.toString());
+                fs.appendFileSync(this.full_path, this.bot_settings.notification_time + "\t" + this.bot_settings.settings.toString());
                 isBotSettingsDisplayed = true;
             }
             else
@@ -67,7 +84,7 @@ class logger {
         }
         else if (!isWalletConfigDisplayed) {
             if (this.wallet_config) {
-                (this.logstream as any).write(this.wallet_config.notification_time + "\t" + this.wallet_config.configuration.toString());
+                fs.appendFileSync(this.full_path, this.wallet_config.notification_time + "\t" + this.wallet_config.configuration.toString());
                 isWalletConfigDisplayed = true;
             }
             else
@@ -75,7 +92,7 @@ class logger {
         }
         else if (!isTargetAddressDisplayed) {
             if (this.target_address) {
-                (this.logstream as any).write(this.target_address.notification_time + "\t" + this.target_address.target_address);
+                fs.appendFileSync(this.full_path, this.target_address.notification_time + "\t" + this.target_address.target_address);
                 isTargetAddressDisplayed = true;
             }
             else 
@@ -83,7 +100,7 @@ class logger {
         }
         else if (!isTargetTimeDisplayed){
             if (this.target_time) {
-                (this.logstream as any).write(this.target_time.notification_time + "\t" + this.target_time.target_time);
+                fs.appendFileSync(this.full_path, this.target_time.notification_time + "\t" + this.target_time.target_time);
                 isTargetTimeDisplayed = true
             }
             else 
@@ -101,8 +118,7 @@ class logger {
 
         this.filetimestamp = Logger.FileTimestamp.getTimestamp();
         this.full_path = this.path + this.filetimestamp.toString() + ".txt";
-        this.logstream = fs.createWriteStream(this.full_path, {flags: 'a'});
-        (this.logstream as any).write(`===LOG FILE CREATED AT TIMESTAMP ${this.filetimestamp}===\n\n`);
+        fs.appendFileSync(this.full_path, `===LOG FILE CREATED AT TIMESTAMP ${this.filetimestamp}===\n\n`);
 
         function exitHandler(exitCode: number) {
             if (exitCode == 10) {
@@ -146,6 +162,7 @@ class logger {
         }
         
         process.on('exit', exitHandler.bind(this))
+               .on('beforeExit', exitHandler.bind(this))
                .on('SIGINT', sigHandler.bind(this))
                .on('SIGUSR1', sigHandler.bind(this))
                .on('SIGUSR2', sigHandler.bind(this))
@@ -160,6 +177,8 @@ class logger {
     public static getInstance() : logger {
         if (logger.instance)
             return logger.instance;
+        console.log("new insta");
+        
         logger.instance = new logger();
         return logger.instance;
     }
