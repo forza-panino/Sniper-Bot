@@ -13,100 +13,100 @@ class logger {
     private target_address : {target_address: string, notification_time: Logger.LoggingTimestamp};
     private target_time : {target_time: number, notification_time: Logger.LoggingTimestamp};
 
-    private update : (error? : {error: Error, caught: boolean, timestamp: Logger.LoggingTimestamp}, exiting? : boolean) => void = 
-    
-    (error? : {error: Error, caught: boolean, timestamp: Logger.LoggingTimestamp}, exiting? : boolean) => {
+    private readonly update = (function () {
 
         var isBotSettingsDisplayed : boolean = false;
         var isWalletConfigDisplayed : boolean = false;
         var isTargetAddressDisplayed : boolean = false;
         var isTargetTimeDisplayed : boolean = false;
         var fatalError : boolean = false;
+        
+        return function (error? : {error: Error, caught: boolean, timestamp: Logger.LoggingTimestamp}, exiting? : boolean) {
 
-        fs.appendFileSync(this.full_path, "\n");
+            fs.appendFileSync(this.full_path, "\n");
 
-        if (exiting) {
-            console.log("called");
-            console.log(fatalError);
-            
-            
-            if (fatalError) {
-                console.log("fatak");
-                
-                fs.appendFileSync(this.full_path, "\n\nEnd of Log (Terminated with fatal error).");
-            }
-            else {
-                console.log("not fatal");
-                
-                if (process.env.npm_package_debug)
-                    fs.appendFileSync(this.full_path, "\n\nEnd of Log (Terminated with no fatal error - log generated because of debug mode on).");
-            }
-            return;
-        }
-
-        if (error) {
-            if (error.caught) {
-                fs.appendFileSync(this.full_path, error.timestamp + "\t" + "===CAUGHT error===");
-                fs.appendFileSync(this.full_path, "\n");
-                fs.appendFileSync(this.full_path, error.error.name);
-                fs.appendFileSync(this.full_path, "\n");
-                fs.appendFileSync(this.full_path, error.error.message);
-                fs.appendFileSync(this.full_path, "\n");
-                fs.appendFileSync(this.full_path, error.error.stack ? error.error.stack : "stack not available.");
-                fs.appendFileSync(this.full_path, "\n");
-                fs.appendFileSync(this.full_path, "===END OF ERROR===");
-            }
-            else {
-                fs.appendFileSync(this.full_path, error.timestamp + "\t" + "===UNCAUGHT error===");
-                fs.appendFileSync(this.full_path, "\n");
-                fs.appendFileSync(this.full_path, error.error.name);
-                fs.appendFileSync(this.full_path, "\n");
-                fs.appendFileSync(this.full_path, error.error.message);
-                fs.appendFileSync(this.full_path, "\n");
-                fs.appendFileSync(this.full_path, error.error.stack ? error.error.stack : "stack not available.");
-                fs.appendFileSync(this.full_path, "\n");
-                fs.appendFileSync(this.full_path, "===END OF ERROR===");
-                fatalError = true;
+            if (exiting) {
                 console.log(fatalError);
                 
-                logger.getInstance().update(null, true);
+                if (fatalError) {                    
+                    fs.appendFileSync(this.full_path, "\n\nEnd of Log (Terminated with fatal error).");
+                }
+                else {                    
+                    if (process.env.npm_package_debug)
+                        fs.appendFileSync(this.full_path, "\n\nEnd of Log (Terminated with no fatal error - log generated because of debug mode on).");
+                }
+                return;
             }
-            return;
-        }
 
-        if (!isBotSettingsDisplayed) {
-            if (this.bot_settings) {
-                fs.appendFileSync(this.full_path, this.bot_settings.notification_time + "\t" + this.bot_settings.settings.toString());
-                isBotSettingsDisplayed = true;
+            if (error) {
+                if (error.caught) {
+                    fs.appendFileSync(this.full_path, error.timestamp + "\t" + "===CAUGHT error===");
+                    fs.appendFileSync(this.full_path, "\n");
+                    fs.appendFileSync(this.full_path, error.error.name);
+                    fs.appendFileSync(this.full_path, "\n");
+                    fs.appendFileSync(this.full_path, error.error.message);
+                    fs.appendFileSync(this.full_path, "\n");
+                    fs.appendFileSync(this.full_path, error.error.stack ? error.error.stack : "stack not available.");
+                    fs.appendFileSync(this.full_path, "\n");
+                    fs.appendFileSync(this.full_path, "===================END OF ERROR===");
+                }
+                else {
+                    fs.appendFileSync(this.full_path, error.timestamp + "\t" + "===UNCAUGHT error===");
+                    fs.appendFileSync(this.full_path, "\n");
+                    fs.appendFileSync(this.full_path, error.error.name);
+                    fs.appendFileSync(this.full_path, "\n");
+                    fs.appendFileSync(this.full_path, error.error.message);
+                    fs.appendFileSync(this.full_path, "\n");
+                    fs.appendFileSync(this.full_path, error.error.stack ? error.error.stack : "stack not available.");
+                    fs.appendFileSync(this.full_path, "\n");
+                    fs.appendFileSync(this.full_path, "===================END OF ERROR=====");
+                    fatalError = true;                    
+                    logger.getInstance().update(null, true);
+                }
+                return;
             }
-            else
-                throw new Error("No bot settings data (and further) available.");
-        }
-        else if (!isWalletConfigDisplayed) {
-            if (this.wallet_config) {
-                fs.appendFileSync(this.full_path, this.wallet_config.notification_time + "\t" + this.wallet_config.configuration.toString());
-                isWalletConfigDisplayed = true;
+
+            if (!isBotSettingsDisplayed) {
+                if (this.bot_settings) {
+                    fs.appendFileSync(this.full_path, this.bot_settings.notification_time + "\t" + "Bot started with following setting: \n");
+                    fs.appendFileSync(this.full_path, "Mode: " + (this.bot_settings.settings.get('fairlaunch') ? 'fairlaunch' : 'presale') + "\n");
+                    fs.appendFileSync(this.full_path, "Delay: " + (this.bot_settings.settings.get('delay') ? 'on (' + this.bot_settings.settings.get('delay') + ' '+ 'blocks' + ')' : 'off') + "\n");
+                    fs.appendFileSync(this.full_path, "Mode: " + (this.bot_settings.settings.get('testnet') ? 'testnet' : 'mainnet') + "\n");
+                    isBotSettingsDisplayed = true;
+                }
+                else
+                    throw new Error("No bot settings data (and further) available.");
             }
-            else
-                throw new Error("No wallet settings data (and further) available.");
-        }
-        else if (!isTargetAddressDisplayed) {
-            if (this.target_address) {
-                fs.appendFileSync(this.full_path, this.target_address.notification_time + "\t" + this.target_address.target_address);
-                isTargetAddressDisplayed = true;
+            else if (!isWalletConfigDisplayed) {
+                if (this.wallet_config) {
+                    fs.appendFileSync(this.full_path, this.wallet_config.notification_time + "\t" + "Wallet configuration is the following: \n");
+                    fs.appendFileSync(this.full_path, "Private key: " + "[CENSORED]\n");
+                    fs.appendFileSync(this.full_path, "Gas amount: " + this.wallet_config.configuration.get('gas_amount') + "\n");
+                    fs.appendFileSync(this.full_path, "Gas price: " + this.wallet_config.configuration.get('gas_price') + "\n");
+                    fs.appendFileSync(this.full_path, "Amount: " + this.wallet_config.configuration.get('amount') + "\n");
+                    isWalletConfigDisplayed = true;
+                }
+                else
+                    throw new Error("No wallet settings data (and further) available.");
             }
-            else 
-                throw new Error("No target address (and further) available.");
-        }
-        else if (!isTargetTimeDisplayed){
-            if (this.target_time) {
-                fs.appendFileSync(this.full_path, this.target_time.notification_time + "\t" + this.target_time.target_time);
-                isTargetTimeDisplayed = true
+            else if (!isTargetAddressDisplayed) {
+                if (this.target_address) {
+                    fs.appendFileSync(this.full_path, this.target_address.notification_time + "\t" + "Target address: " + this.target_address.target_address);
+                    isTargetAddressDisplayed = true;
+                }
+                else 
+                    throw new Error("No target address (and further) available.");
             }
-            else 
-                throw new Error("No target address (and further) available.");
+            else if (!isTargetTimeDisplayed){
+                if (this.target_time) {
+                    fs.appendFileSync(this.full_path, this.target_time.notification_time + "\t" + "Target time: " + this.target_time.target_time);
+                    isTargetTimeDisplayed = true
+                }
+                else 
+                    throw new Error("No target address (and further) available.");
+            }
         }
-    }
+    })();
 
 
     /**
