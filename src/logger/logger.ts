@@ -176,7 +176,6 @@ class logger {
     public static getInstance() : logger {
         if (logger.instance)
             return logger.instance;
-        console.log("new insta");
         
         logger.instance = new logger();
         return logger.instance;

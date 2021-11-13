@@ -12,6 +12,8 @@
     "compile": "npx tsc",
     "set-italian-language": "node -e \"let pkg=require('./package.json'); pkg.config.language='it'; require('fs').writeFileSync('package.json', JSON.stringify(pkg, null, 2));\"",
     "set-english-language": "node -e \"let pkg=require('./package.json'); pkg.config.language='en'; require('fs').writeFileSync('package.json', JSON.stringify(pkg, null, 2));\"",
+    "debug-on": "node -e \"let pkg=require('./package.json'); pkg.config.debug=true; require('fs').writeFileSync('package.json', JSON.stringify(pkg, null, 2));\"",
+    "debug-off": "node -e \"let pkg=require('./package.json'); pkg.config.debug=false; require('fs').writeFileSync('package.json', JSON.stringify(pkg, null, 2));\"",
     "mainnet-presale": "npm run compile && node build/main/main.js -presale",
     "testnet-presale": "npm run compile && node build/main/main.js -testnet -presale",
     "mainnet-fairlaunch": "npm run compile && node build/main/main.js -fairlaunch",
