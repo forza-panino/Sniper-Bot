@@ -1,5 +1,5 @@
-import language from "./language_pack/selected_language"
-import { CommsHandler } from "./comms_handler";
+import language from "../language_pack/selected_language"
+import { CommsHandler } from "../handlers/comms_handler";
 
 class PresaleBot {
 

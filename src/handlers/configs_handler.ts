@@ -1,10 +1,10 @@
-import language from "./language_pack/selected_language"
+import language from "../language_pack/selected_language"
 const fs = require('fs');
 const path = require('path');
 import * as readline from 'readline';
 import { stdin as input, stdout as output } from 'process';
 
-const configs_path : string = path.join(__dirname, "..", "configs", "walllets_config.json");
+const configs_path : string = path.join(__dirname, "..", "..", "configs", "walllets_config.json");
 
 /**
  * @function configsFileExist() checks if configuration file exists.

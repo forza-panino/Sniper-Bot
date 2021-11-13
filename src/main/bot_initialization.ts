@@ -1,5 +1,5 @@
-import language from "./language_pack/selected_language"
-import cfgh from "./configs_handler"
+import language from "../language_pack/selected_language"
+import cfgh from "../handlers/configs_handler"
 import * as readline from 'readline';
 import { stdin as input, stdout as output } from 'process';
 const fs = require('fs');
@@ -14,10 +14,9 @@ mode.set('delay', 0); //no delay by default
  * Shows logo and credits banner.
  */
 function welcome() {
-    console.log(fs.readFileSync(path.join(__dirname, "..", "assets", "logo.ans")).toString());
-    console.log(fs.readFileSync(path.join(__dirname, "..", "assets", "credits.ans")).toString());
-
-    console.log("a"); //Cannot understand why it is needed, otherwise first log lacks two letters. Might be some ansi issue.
+    console.log(fs.readFileSync(path.join(__dirname, "..", "..", "assets", "logo.ans")).toString());
+    console.log(fs.readFileSync(path.join(__dirname, "..", "..", "assets", "credits.ans")).toString());
+    console.log("\x1b[0m");
 }
 
 /**
@@ -61,7 +60,7 @@ function init() {
     //FAIRLAUNCH NOT AVAILABLE
     if (mode.get('fairlaunch')) {
         console.log("\x1b[31m" + language.lang.FAIR_TBD + "\x1b[0m");
-        process.exit();
+        process.exit(10);
 }
 }
 

@@ -1,8 +1,11 @@
-import language from "./language_pack/selected_language"
+import language from "../language_pack/selected_language"
 import bot_init from "./bot_initialization"
 import * as readline from 'readline';
 import { stdin as input, stdout as output } from 'process';
-import {PresaleBot} from "./presale_bot"
+import {PresaleBot} from "../bots/presale_bot"
+import {logger} from "../logger/logger"
+
+const myLogger : logger = logger.getInstance();
 
 async function askTargetAddress() : Promise<string> {
     const rl = readline.createInterface({ input, output });
@@ -14,6 +17,7 @@ async function askTargetAddress() : Promise<string> {
         if (asking_confirmation) {
             switch (line.toLowerCase()) {
                 case 'y':
+                    myLogger.updateAddress(answer);
                     return answer;
                 case 'n':
                     asking_confirmation = false;
@@ -142,7 +146,9 @@ bot_init.welcome();
 bot_init.init();
 bot_init.showCurrentBotSettings();
 bot_init.delayConfig().then(() => {
+    myLogger.updateBotConfig(bot_init.mode);
     bot_init.walletConfig().then(async () => {
+        myLogger.updateWalletConfig(bot_init.getWalletConfig());
         if (bot_init.mode.get('presale')) {
             console.log("\n\x1b[36m" + language.lang.INITIALIZING_PRESALE_BOT + "\x1b[0m");
             var presale_bot : PresaleBot = new PresaleBot(bot_init.mode.get('testnet') as boolean,  
@@ -151,6 +157,7 @@ bot_init.delayConfig().then(() => {
                                                           await askTargetAddress());
             console.log("\n\x1b[36m" + language.lang.WILL_ASK_TIME + "\x1b[1m\x1b[4m" + language.lang.LOCAL_TIME + "\x1b[0m.\x1b[0m");
             let trigger_time = await askTriggerTime();
+            myLogger.updateTime(trigger_time.getTime());
             presale_bot.setTime(trigger_time.getTime());            
             console.log("\x1b[33m" + language.lang.START_TIME_SET + "%d:%d \x1b[1m\x1b[4m" + language.lang.LOCAL_TIME + "\x1b[0m.\x1b[0m", trigger_time.getHours(), trigger_time.getMinutes());
             presale_bot.startSniping();

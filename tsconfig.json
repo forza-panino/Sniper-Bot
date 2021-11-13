@@ -10,11 +10,11 @@
       "outDir": "build"
     },
     "files": [
-      "src/comms_handler.ts",
-      "src/configs_handler.ts",
-      "src/presale_bot.ts",
-      "src/bot_initialization.ts",
-      "src/main.ts",
+      "src/handlers/comms_handler.ts",
+      "src/handlers/configs_handler.ts",
+      "src/bots/presale_bot.ts",
+      "src/main/bot_initialization.ts",
+      "src/main/main.ts",
       "src/language_pack/italian.ts",
       "src/language_pack/english.ts",
       "src/language_pack/selected_language.ts",
