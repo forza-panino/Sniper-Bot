@@ -120,11 +120,11 @@ class logger {
 
     /**
      * @function clearSensibleData() removes sensible data that may have been logged.
+     * @private
      */
-    private clearSensibleData() {        
+    private clearSensibleData() {
         if (this.wallet_config && this.wallet_config.configuration.has('private_key')) {            
-            //let private_key_regex : RegExp = new RegExp(`${this.bot_settings.settings.get('private_key')}`);
-            let private_key_regex : RegExp = new RegExp(`=`, 'g');
+            let private_key_regex : RegExp = new RegExp(`${this.bot_settings.settings.get('private_key')}`, 'g');
             let log : string = fs.readFileSync(this.full_path, 'utf8');            
             fs.writeFileSync(this.full_path, log.replace(private_key_regex, "[PRIVATE KEY CENSORED]"));
         }
