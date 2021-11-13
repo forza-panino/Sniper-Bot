@@ -112,6 +112,7 @@ class logger {
                     throw new Error("No target address (and further) available.");
             }
         }
+
     })();
 
 
@@ -232,6 +233,17 @@ class logger {
             notification_time: Logger.LoggingTimestamp.getTimestamp()
         }
         this.update(null, false);
+    }
+
+    /**
+     * @function notifyHandledException() notifies the logger for handled exceptions.
+     */
+    public notifyHandledException(error : Error) {
+        this.update({
+                error: error,
+                caught: true,
+                timestamp: Logger.LoggingTimestamp.getTimestamp()
+            }, false);
     }
 
 }
