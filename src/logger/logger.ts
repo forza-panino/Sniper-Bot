@@ -25,15 +25,13 @@ class logger {
 
             fs.appendFileSync(this.full_path, "\n");
 
-            if (exiting) {
-                console.log(fatalError);
-                
+            if (exiting) {                
                 if (fatalError) {                    
                     fs.appendFileSync(this.full_path, "\n\nEnd of Log (Terminated with fatal error).");
                 }
                 else {                    
                     if (process.env.npm_package_debug)
-                        fs.appendFileSync(this.full_path, "\n\nEnd of Log (Terminated with no fatal error - log generated because of debug mode on).");
+                        fs.appendFileSync(this.full_path, "\n\nEnd of Log (Terminated with NO fatal error - log generated because of debug mode on).");
                 }
                 return;
             }
@@ -120,18 +118,18 @@ class logger {
         this.full_path = this.path + this.filetimestamp.toString() + ".txt";
         fs.appendFileSync(this.full_path, `===LOG FILE CREATED AT TIMESTAMP ${this.filetimestamp}===\n\n`);
 
-        function exitHandler(exitCode: number) {
-            if (exitCode == 10) {
+        function exitHandler(exitCode: number) {      
+            if (exitCode == -10)      
+                process.exit();   
+            else if (exitCode == 10) {
                 this.update({
                     error: new Error("exit(10) has been called. Program forcibly closed by itself."),
                     caught: false,
                     timestamp: Logger.LoggingTimestamp.getTimestamp()
                 }, false);
-                process.exit();
             }
             else if (exitCode == 0){
                 this.update(null, true);
-                process.exit();
             }
             else {
                 this.update({
@@ -140,6 +138,7 @@ class logger {
                     timestamp: Logger.LoggingTimestamp.getTimestamp()
                 }, false);
             }
+            process.exit();
         }
 
         function sigHandler(sig : any) {
@@ -148,17 +147,17 @@ class logger {
                 caught: false,
                 timestamp: Logger.LoggingTimestamp.getTimestamp()
             }, false);
-            process.exit();
+            process.exit(-10);
         }
 
-        function uncaughtHandler(error : Error) {
+        function uncaughtHandler(error : Error) {            
             this.update({
                 error: error,
                 caught: false,
                 timestamp: Logger.LoggingTimestamp.getTimestamp()
             }, false);
             console.error(error);
-            process.exit();
+            process.exit(-10);
         }
         
         process.on('exit', exitHandler.bind(this))
