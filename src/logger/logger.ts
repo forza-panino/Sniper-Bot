@@ -32,6 +32,14 @@ class logger {
                 else {                    
                     if (process.env.npm_package_debug)
                         fs.appendFileSync(this.full_path, "\n\nEnd of Log (Terminated with NO fatal error - log generated because of debug mode on).");
+                    else {
+                        try {
+                            fs.unlinkSync(this.full_path);
+                        } catch (error : any) {
+                            console.error(error);
+                        };
+                        
+                    }
                 }
                 return;
             }
