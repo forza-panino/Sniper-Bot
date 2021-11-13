@@ -28,10 +28,13 @@ class logger {
             if (exiting) {                
                 if (fatalError) {                    
                     fs.appendFileSync(this.full_path, "\n\nEnd of Log (Terminated with fatal error).");
+                    this.clearSensibleData();
                 }
                 else {                    
-                    if (process.env.npm_package_debug)
+                    if (process.env.npm_package_debug) {
                         fs.appendFileSync(this.full_path, "\n\nEnd of Log (Terminated with NO fatal error - log generated because of debug mode on).");
+                        this.clearSensibleData();
+                    }
                     else {
                         try {
                             fs.unlinkSync(this.full_path);
@@ -114,6 +117,18 @@ class logger {
         }
 
     })();
+
+    /**
+     * @function clearSensibleData() removes sensible data that may have been logged.
+     */
+    private clearSensibleData() {        
+        if (this.wallet_config && this.wallet_config.configuration.has('private_key')) {            
+            //let private_key_regex : RegExp = new RegExp(`${this.bot_settings.settings.get('private_key')}`);
+            let private_key_regex : RegExp = new RegExp(`=`, 'g');
+            let log : string = fs.readFileSync(this.full_path, 'utf8');            
+            fs.writeFileSync(this.full_path, log.replace(private_key_regex, "[PRIVATE KEY CENSORED]"));
+        }
+    }
 
 
     /**
@@ -245,6 +260,7 @@ class logger {
                 timestamp: Logger.LoggingTimestamp.getTimestamp()
             }, false);
     }
+
 
 }
 
