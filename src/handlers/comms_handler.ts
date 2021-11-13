@@ -1,4 +1,5 @@
 import language from "../language_pack/selected_language"
+import { logger } from "../logger/logger";
 const Web3 = require('web3');
 
 class CommsHandler {
@@ -153,6 +154,7 @@ class CommsHandler {
                         callback(await this.web3.eth.getBlock('latest'));
                     }
                 } catch (err : any) {
+                    logger.getInstance().notifyHandledException(err);
                     console.warn("====================" + language.lang.BLOCK_QUERY_ERR + "====================");
                     console.warn(err);
                     console.warn("====================" + language.lang.EOR + "====================");
