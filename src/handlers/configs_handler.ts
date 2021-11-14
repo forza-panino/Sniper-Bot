@@ -7,7 +7,7 @@ import { stdin as input, stdout as output } from 'process';
 const configs_path : string = path.join(__dirname, "..", "..", "configs", "walllets_config.json");
 
 /**
- * @function configsFileExist() checks if configuration file exists.
+ * @method configsFileExist() checks if configuration file exists.
  * @returns {boolean} true if exists, false otherwise.
  */
 function configsFileExist() : boolean {
@@ -15,7 +15,7 @@ function configsFileExist() : boolean {
 }
 
 /**
- * @function createConfigsFile() checks if configuration file exists.
+ * @method createConfigsFile() checks if configuration file exists.
  * @returns {boolean} true if successfull, false otherwise.
  */
 //TODO: Spartano ma funzionante, poi farlo più elegante.

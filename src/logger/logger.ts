@@ -119,7 +119,7 @@ class logger {
     })();
 
     /**
-     * @function clearSensibleData() removes sensible data that may have been logged.
+     * @method clearSensibleData() removes sensible data that may have been logged.
      * @private
      */
     private clearSensibleData() {
@@ -194,7 +194,7 @@ class logger {
     }
 
     /**
-     * @function getInstance() returns the only instance of Logger (singleton) 
+     * @method getInstance() returns the only instance of Logger (singleton) 
      * @returns {Logger} returns Logger.instance
      */
     public static getInstance() : logger {
@@ -206,7 +206,7 @@ class logger {
     }
 
     /**
-     * @function updateBotConfig()
+     * @method updateBotConfig()
      */
     public updateBotConfig(bot_settings : Map<string, boolean | number>) {
         this.bot_settings = {
@@ -217,7 +217,7 @@ class logger {
     }
 
     /**
-     * @function updateWalletConfig()
+     * @method updateWalletConfig()
      */
     public updateWalletConfig(wallet_config : Map<string, string>) {
         wallet_config.set('private_key', "CENSORED");
@@ -229,7 +229,7 @@ class logger {
     }
 
     /**
-     * @function updateAddress()
+     * @method updateAddress()
      */
     public updateAddress(address: string) {
         this.target_address = {
@@ -240,7 +240,7 @@ class logger {
     }
 
     /**
-     * @function updateTime()
+     * @method updateTime()
      */
     public updateTime(time: number) {
         this.target_time = {
@@ -251,7 +251,7 @@ class logger {
     }
 
     /**
-     * @function notifyHandledException() notifies the logger for handled exceptions.
+     * @method notifyHandledException() notifies the logger for handled exceptions.
      */
     public notifyHandledException(error : Error) {
         this.update({
@@ -290,7 +290,7 @@ namespace Logger {
 
 
         /**
-         * @function getTimestamp()
+         * @method getTimestamp()
          * @returns {LoggingTimestamp} correct instance of LoggingTimestamp to use for logging.
          */
         public static getTimestamp() : LoggingTimestamp {
@@ -303,7 +303,7 @@ namespace Logger {
         }
 
         /**
-         * @function toString()
+         * @method toString()
          * @override
          * @returns {string} returns correct string representation of LoggingTimestamp instance (the timestamp property) - if correctly set.
          */
@@ -337,7 +337,7 @@ namespace Logger {
 
 
         /**
-         * @function getTimestamp()
+         * @method getTimestamp()
          * @returns {FileTimestamp} correct instance of FileTimestamp to use for log file's name.
          */
         public static getTimestamp() : FileTimestamp {
@@ -351,7 +351,7 @@ namespace Logger {
         }
 
         /**
-         * @function toString()
+         * @method toString()
          * @override
          * @returns {sttring} returns correct string representation of FileTimestamp instance (the timestamp property) - if correctly set.
          */

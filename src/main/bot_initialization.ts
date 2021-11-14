@@ -10,7 +10,7 @@ mode.set('testnet', false); //mainnet by default
 mode.set('delay', 0); //no delay by default
 
 /**
- * @function welcome()
+ * @method welcome()
  * Shows logo and credits banner.
  */
 function welcome() {
@@ -20,7 +20,7 @@ function welcome() {
 }
 
 /**
- * @function init()
+ * @method init()
  * Configures bot mode (presale/fairlaunch & testnet/mainnet & delay) based on args passed to process command.
  * @throws process.exit() if -fairlaunch flag is passed as argument: fairlaunch mode under development.
  */
@@ -65,7 +65,7 @@ function init() {
 }
 
 /**
- * @function showCurrentBotSettings()
+ * @method showCurrentBotSettings()
  * Shows current bot settings.
  */
 function showCurrentBotSettings() {
@@ -76,7 +76,7 @@ function showCurrentBotSettings() {
 }
 
 /**
- * @function delayConfig()
+ * @method delayConfig()
  * Asks user if delay settings are okay; if not, configuration procedure for delay value will start. 
  */
 async function delayConfig() {
@@ -134,7 +134,7 @@ async function delayConfig() {
 }
 
 /**
- * @function showWalletConfig()
+ * @method showWalletConfig()
  * Shows current configuration of wallet. (private key, gas price, gas amount, amount to buy).
  */
 function showWalletConfig() {
@@ -146,7 +146,7 @@ function showWalletConfig() {
 }
 
 /**
- * @function walletConfig() 
+ * @method walletConfig() 
  * Asks user if wallet settings are okay; if not, configuration procedure for wallet will start.
  */
 async function walletConfig() {
@@ -192,7 +192,7 @@ async function walletConfig() {
 }
 
 /**
- * @function getWalletConfig()
+ * @method getWalletConfig()
  * @returns {Map<string, string>}  map with following specifications:
  * private_key => private key of the wallet you're willing to use
  * gas_amount => max amount of gas you're willing to use

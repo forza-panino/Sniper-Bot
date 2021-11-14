@@ -37,7 +37,7 @@ class PresaleBot {
 
     /**
      * Sets time at which presale starts.
-     * @function setTime()
+     * @method setTime()
      * @param {number} trigger_time time of presale start in milliseconds.
      */
     public setTime(trigger_time : number) {
@@ -45,7 +45,7 @@ class PresaleBot {
     }
 
     /**
-     * @function sendTxCallback()
+     * @method sendTxCallback()
      * Callback to be used after tx has been issued to the blockchain via web3.eth.sendSignedTransaction();
      * @param {Error} error error - if any - issuing the transaction.
      * @param {result} result transaction hash - if successfull.
@@ -61,7 +61,7 @@ class PresaleBot {
     }
 
     /**
-     * @function startSniping()
+     * @method startSniping()
      * Subscribes to new block event and waits until timestap of new block >= trigger_date. Delay will be applied if required.
      */
     public startSniping() {

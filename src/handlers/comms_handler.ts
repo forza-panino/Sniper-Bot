@@ -34,7 +34,7 @@ class CommsHandler {
     }
 
     /**
-     * @function setTargetContract() sets contract to snipe.
+     * @method setTargetContract() sets contract to snipe.
      * @param {string} target_contract contract to snipe.
      * @returns {void}
      * @throws Will throw error if address not valid.
@@ -49,7 +49,7 @@ class CommsHandler {
 
     /**
      * @private
-     * @function verifyPrivateKey() check if private key is valid.
+     * @method verifyPrivateKey() check if private key is valid.
      * @param {string} private_key private key to verify. NOTE: remove '0x' prefix.
      * @returns {boolean} true if valid, false otherwise.
      * */
@@ -64,7 +64,7 @@ class CommsHandler {
     }
     
     /**
-     * @function addPrivateKeys() set private keys to sign transaction with (ALL private keys will be used).
+     * @method addPrivateKeys() set private keys to sign transaction with (ALL private keys will be used).
      * @param {string[]} private_keys array of private keys to sign transaction with (ALL private keys will be used). NOTE: remove "0x" prefix.
      * @returns {void}
      * @throws Will throw error if private keys are not correct.
@@ -80,7 +80,7 @@ class CommsHandler {
     }
 
     /**
-     * @function prepareTXs() prepare txs to sign
+     * @method prepareTXs() prepare txs to sign
      * @returns {void}
      * @throws Will throw error if gas settings are wrong.
      */
@@ -107,7 +107,7 @@ class CommsHandler {
     }
 
     /**
-     * @function defaultCallback()
+     * @method defaultCallback()
      * default callback to be used after tx has been issued to the blockchain via web3.eth.sendSignedTransaction();
      * @param {Error} error error - if any - issuing the transaction.
      * @param {result} result transaction hash - if successfull.
@@ -120,7 +120,7 @@ class CommsHandler {
     }
 
     /**
-     * @function sendTXs() 
+     * @method sendTXs() 
      * @returns {void}
      * @throws Will throw an error for wrong gas settings or insufficient balance.
      */
@@ -138,7 +138,7 @@ class CommsHandler {
     }
 
     /**
-     * @function subscribeNewBlocks()
+     * @method subscribeNewBlocks()
      * Triggers callback on new blocks.
      * @param {Function} callback callback function to be called on new blocks.
      */
