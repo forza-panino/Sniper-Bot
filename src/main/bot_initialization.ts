@@ -10,7 +10,7 @@ mode.set('testnet', false); //mainnet by default
 mode.set('delay', 0); //no delay by default
 
 /**
- * @method welcome()
+ * @function welcome()
  * Shows logo and credits banner.
  */
 function welcome() {
@@ -20,7 +20,7 @@ function welcome() {
 }
 
 /**
- * @method init()
+ * @function init()
  * Configures bot mode (presale/fairlaunch & testnet/mainnet & delay) based on args passed to process command.
  * @throws process.exit() if -fairlaunch flag is passed as argument: fairlaunch mode under development.
  */
@@ -61,11 +61,12 @@ function init() {
     if (mode.get('fairlaunch')) {
         console.log("\x1b[31m" + language.lang.FAIR_TBD + "\x1b[0m");
         process.exit(10);
-}
+    }
+
 }
 
 /**
- * @method showCurrentBotSettings()
+ * @function showCurrentBotSettings()
  * Shows current bot settings.
  */
 function showCurrentBotSettings() {
@@ -76,8 +77,9 @@ function showCurrentBotSettings() {
 }
 
 /**
- * @method delayConfig()
- * Asks user if delay settings are okay; if not, configuration procedure for delay value will start. 
+ * @function delayConfig()
+ * @async
+ * Asks user if delay settings are okay; if not, configuration procedure for delay value will start.
  */
 async function delayConfig() {
     const rl = readline.createInterface({ input, output });
@@ -134,7 +136,7 @@ async function delayConfig() {
 }
 
 /**
- * @method showWalletConfig()
+ * @function showWalletConfig()
  * Shows current configuration of wallet. (private key, gas price, gas amount, amount to buy).
  */
 function showWalletConfig() {
@@ -146,13 +148,22 @@ function showWalletConfig() {
 }
 
 /**
- * @method walletConfig() 
+ * @function walletConfig() 
+ * @async
  * Asks user if wallet settings are okay; if not, configuration procedure for wallet will start.
  */
 async function walletConfig() {
 
+    /**
+     * @function
+     * @async
+     * @description starts wallet configuration procedure by calling `createConfigsFile()` defined in src/handlers/configs_handler.ts
+     */
     async function startWalletConfiguration() {
+
         await cfgh.createConfigsFile()
+
+        //At this point configuration procedure has finished but we have to check if it finished successfully.
         if (cfgh.configsFileExist()) {
             console.log("\n" + language.lang.SHOW_NEW_WALLET_CONF);
             showWalletConfig();
@@ -189,10 +200,11 @@ async function walletConfig() {
         console.log("No configuration file found. Starting configuration procedure now.\n");
         await startWalletConfiguration(); 
     }
+
 }
 
 /**
- * @method getWalletConfig()
+ * @function getWalletConfig()
  * @returns {Map<string, string>}  map with following specifications:
  * private_key => private key of the wallet you're willing to use
  * gas_amount => max amount of gas you're willing to use

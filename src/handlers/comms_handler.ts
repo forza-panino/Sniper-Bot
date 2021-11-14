@@ -10,9 +10,21 @@ class CommsHandler {
 
     private signed_tx : [Promise<Object>] = [new Promise<Object>(function(){})];
     private private_keys : string[] = [];
-    private gas_price : string;
     private gas_amount : string;
     private target_contract : string;
+
+    /**
+     * @private
+     * @property
+     * @description GWEI per unit of gas
+     */
+    private gas_price : string;
+
+    /**
+     * @private
+     * @property
+     * @description amount in ETHER of BNB to send
+     */
     private amount : string;
 
     /**
@@ -61,6 +73,7 @@ class CommsHandler {
         } catch (error) {
             return false;
         }
+
     }
     
     /**
@@ -82,9 +95,8 @@ class CommsHandler {
     /**
      * @method prepareTXs() prepare txs to sign
      * @returns {void}
-     * @throws Will throw error if gas settings are wrong.
+     * @throws Will throw error if gas settings are wrong (or other are incosistent).
      */
-    //TODO: implementare logs degli errori col callback
     public prepareTXs() : void {
         
         this.private_keys.forEach((key : string) => {
@@ -103,7 +115,8 @@ class CommsHandler {
 
                 )
             );
-        })        
+        });
+
     }
 
     /**
@@ -121,10 +134,8 @@ class CommsHandler {
 
     /**
      * @method sendTXs() 
-     * @returns {void}
      * @throws Will throw an error for wrong gas settings or insufficient balance.
      */
-    //TODO: implementare logs degli errori col callback
     public sendTXs(callback : Function) : void {
                 
         this.signed_tx.forEach(async (sig_tx: any) => {
@@ -134,7 +145,8 @@ class CommsHandler {
                 else
                     callback(error, result);
             });
-        })
+        });
+        
     }
 
     /**

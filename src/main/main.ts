@@ -7,6 +7,12 @@ import {logger} from "../logger/logger"
 
 const myLogger : logger = logger.getInstance();
 
+/**
+ * @function askTargetAddress()
+ * @async
+ * @description asks the user for target address
+ * @returns {Promise<string>} target address inputed
+ */
 async function askTargetAddress() : Promise<string> {
     const rl = readline.createInterface({ input, output });
     rl.setPrompt(language.lang.ASK_TARGET_ADDR);
@@ -17,6 +23,7 @@ async function askTargetAddress() : Promise<string> {
         if (asking_confirmation) {
             switch (line.toLowerCase()) {
                 case 'y':
+                    //Notify address to logger
                     myLogger.updateAddress(answer);
                     return answer;
                 case 'n':
@@ -37,6 +44,12 @@ async function askTargetAddress() : Promise<string> {
     }
 }
 
+/**
+ * @function askTriggerTime()
+ * @async
+ * @description asks user for time of presale start.
+ * @returns {Promise<Date>} date inputed PARSED INTO UTC
+ */
 async function askTriggerTime() : Promise<Date> {
     var trigger_time : Date = new Date();
     trigger_time.setSeconds(0);
@@ -145,25 +158,43 @@ async function askTriggerTime() : Promise<Date> {
 bot_init.welcome();
 bot_init.init();
 bot_init.showCurrentBotSettings();
+
 bot_init.delayConfig().then(() => {
+
+    //User has decided if he wants to change the delay value and by what, we can now notify logger of bot settings.
     myLogger.updateBotConfig(bot_init.mode);
+
+    //Showing user current wallet settings and asking for confirmation.
     bot_init.walletConfig().then(async () => {
+
+        //User has decided if he wants to change wallet configs and to what, we can now notify logger of wallet settings.
         myLogger.updateWalletConfig(bot_init.getWalletConfig());
+
+        //Checking bot mode
         if (bot_init.mode.get('presale')) {
+
             console.log("\n\x1b[36m" + language.lang.INITIALIZING_PRESALE_BOT + "\x1b[0m");
             var presale_bot : PresaleBot = new PresaleBot(bot_init.mode.get('testnet') as boolean,  
                                                           bot_init.mode.get('delay') as number, 
                                                           bot_init.getWalletConfig(),
                                                           await askTargetAddress());
             console.log("\n\x1b[36m" + language.lang.WILL_ASK_TIME + "\x1b[1m\x1b[4m" + language.lang.LOCAL_TIME + "\x1b[0m.\x1b[0m");
+
+            //Asking target time
             let trigger_time = await askTriggerTime();
+
+            //Target time has been provided, we can now notify it to logger and AFTER to presale_bot too
             myLogger.updateTime(trigger_time.getTime());
             presale_bot.setTime(trigger_time.getTime());            
             console.log("\x1b[33m" + language.lang.START_TIME_SET + "%d:%d \x1b[1m\x1b[4m" + language.lang.LOCAL_TIME + "\x1b[0m.\x1b[0m", trigger_time.getHours(), trigger_time.getMinutes());
+            
             presale_bot.startSniping();
+
         }
         else {
-            //TODO: IMPLEMENTE FAIRLAUNCH BOT
+            //TODO: IMPLEMENT FAIRLAUNCH BOT
         }
-    })
-})
+
+    });
+
+});
