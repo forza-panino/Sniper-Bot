@@ -1,6 +1,6 @@
 ---
 name: Bug report
-about: Guideline for bug reporting
+about: Template for bug reporting
 title: "[BUG] [INSERT TITLE HERE]"
 labels: bug
 assignees: forza-panino
