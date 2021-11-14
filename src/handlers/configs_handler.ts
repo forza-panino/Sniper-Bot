@@ -18,8 +18,6 @@ function configsFileExist() : boolean {
  * @function createConfigsFile() checks if configuration file exists.
  * @returns {boolean} true if successfull, false otherwise.
  */
-//TODO: Spartano ma funzionante, poi farlo più elegante.
-//TODO: logging errori
 async function createConfigsFile() : Promise<boolean> {
     
     const rl = readline.createInterface({ input, output });
@@ -73,6 +71,7 @@ async function createConfigsFile() : Promise<boolean> {
         asking_confirmation = true;
         rl.setPrompt(language.lang.YOU_DIGITED + answer +"\n" + language.lang.CONFIRM);
         rl.prompt();
+
     }
     
     
@@ -86,6 +85,15 @@ async function createConfigsFile() : Promise<boolean> {
 
 }
 
+/**
+ * @function getConfigs()
+ * @returns {Map<string, string>} map with following specifications:
+ * private_key => private key of the wallet you're willing to use
+ * gas_amount => max amount of gas you're willing to use
+ * gas_price => how much you want to pay the gas
+ * amount => how much you're willing to buy
+ * @returns {null} if no configuration file exists
+ */
 function getConfigs() : Map<string, string> {
     if (configsFileExist()){
         return new Map(JSON.parse(fs.readFileSync(configs_path)));
