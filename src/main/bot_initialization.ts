@@ -57,6 +57,7 @@ function init() {
         
     });
 
+
 }
 
 /**
@@ -72,7 +73,8 @@ function showCurrentBotSettings() {
 
 /**
  * @function delayConfig()
- * Asks user if delay settings are okay; if not, configuration procedure for delay value will start. 
+ * @async
+ * Asks user if delay settings are okay; if not, configuration procedure for delay value will start.
  */
 async function delayConfig() {
     const rl = readline.createInterface({ input, output });
@@ -142,12 +144,21 @@ function showWalletConfig() {
 
 /**
  * @function walletConfig() 
+ * @async
  * Asks user if wallet settings are okay; if not, configuration procedure for wallet will start.
  */
 async function walletConfig() {
 
+    /**
+     * @function
+     * @async
+     * @description starts wallet configuration procedure by calling `createConfigsFile()` defined in src/handlers/configs_handler.ts
+     */
     async function startWalletConfiguration() {
+
         await cfgh.createConfigsFile()
+
+        //At this point configuration procedure has finished but we have to check if it finished successfully.
         if (cfgh.configsFileExist()) {
             console.log("\n" + language.lang.SHOW_NEW_WALLET_CONF);
             showWalletConfig();
@@ -184,6 +195,7 @@ async function walletConfig() {
         console.log("No configuration file found. Starting configuration procedure now.\n");
         await startWalletConfiguration(); 
     }
+
 }
 
 /**

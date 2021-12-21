@@ -21,5 +21,6 @@
       "src/language_pack/italian.ts",
       "src/language_pack/english.ts",
       "src/language_pack/selected_language.ts",
+      "src/logger/logger.ts"
     ]
-  }
+}
