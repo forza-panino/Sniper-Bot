@@ -42,7 +42,7 @@ class PresaleBot {
             );
 
         this.comms_handler.addPrivateKeys([wallet_config.get('private_key')]);
-        this.comms_handler.setTargetContract (presale_address);
+        this.comms_handler.setTargetContract(presale_address);
     }
 
 
@@ -76,7 +76,7 @@ class PresaleBot {
      * Subscribes to new block event and waits until timestap of new block >= trigger_date. Delay will be applied if required.
      */
     public startSniping() {
-        this.comms_handler.prepareTXs();
+        this.comms_handler.preparePresaleTXs();
         var target_block : number;
         var time_triggered : boolean = false;
         console.log(language.lang.WAITING);

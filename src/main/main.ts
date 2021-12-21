@@ -4,6 +4,7 @@ import * as readline from 'readline';
 import { stdin as input, stdout as output } from 'process';
 import {PresaleBot} from "../bots/presale_bot"
 import {logger} from "../logger/logger"
+import {FairLaunchBot} from "../bots/fairlaunch_bot"
 
 const myLogger : logger = logger.getInstance();
 
@@ -155,6 +156,42 @@ async function askTriggerTime() : Promise<Date> {
     return new Date(trigger_time.toUTCString());
 }
 
+async function askSwapPair() : Promise<string> {
+    const rl = readline.createInterface({ input, output });
+    rl.setPrompt("Choose the pair; digit 1 for bnb or 2 for busd: ");
+    rl.prompt();
+    var answer : string;
+    var asking_confirmation : boolean = false;
+    for await (let line of rl) {
+        if (asking_confirmation) {
+            switch (line.toLowerCase()) {
+                case 'y':
+                    //myLogger.updateAddress(answer);
+                    if (!(answer === "1") && !(answer === "2")) {
+                        asking_confirmation = false;
+                        rl.setPrompt("Not valid. Digit 1 for bnb or 2 for busd: ");
+                        rl.prompt();
+                        continue;
+                    }
+                    return answer === "1" ? "bnb" : "busd";
+                case 'n':
+                    asking_confirmation = false;
+                    rl.setPrompt("Choose the pair; digit 1 for bnb or 2 for busd: ");
+                    rl.prompt();
+                    continue;
+                default:
+                    rl.setPrompt(language.lang.ONLY_Y_OR_N);
+                    rl.prompt();
+                    continue;
+            }
+        }
+        answer = line;
+        asking_confirmation = true;
+        rl.setPrompt(language.lang.YOU_DIGITED + answer + "\n" + language.lang.CONFIRM);
+        rl.prompt();
+    }
+}
+
 bot_init.welcome();
 bot_init.init();
 bot_init.showCurrentBotSettings();
@@ -192,7 +229,12 @@ bot_init.delayConfig().then(() => {
 
         }
         else {
-            //TODO: IMPLEMENT FAIRLAUNCH BOT
+            var fairlaunch_bot : FairLaunchBot = new FairLaunchBot(bot_init.mode.get('testnet') as boolean,  
+                                                                   bot_init.mode.get('delay') as number, 
+                                                                   bot_init.getWalletConfig(),                                                       
+                                                                   await askTargetAddress());
+            fairlaunch_bot.startSniping((await askSwapPair()) === "bnb");
+
         }
 
     });
