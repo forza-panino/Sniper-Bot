@@ -2,10 +2,30 @@ const fs = require('fs');
 
 class logger {
 
+    /**
+     * @property
+     * @private
+     * @readonly
+     * @description folder path
+     */
     private readonly path = "./logs/";
+
     private readonly filetimestamp : Logger.FileTimestamp;
+
+    /**
+     * @property
+     * @private
+     * @readonly
+     * @description path of log file for current bot process.
+     */
     private readonly full_path : string;
 
+    /**
+     * @property
+     * @private
+     * @static
+     * @description the only instance of logger class
+     */
     private static instance : logger;
 
     private bot_settings : {settings: Map<string, boolean | number>, notification_time: Logger.LoggingTimestamp};
@@ -13,12 +33,25 @@ class logger {
     private target_address : {target_address: string, notification_time: Logger.LoggingTimestamp};
     private target_time : {target_time: number, notification_time: Logger.LoggingTimestamp};
 
+    /**
+     * @method
+     * @private
+     * @readonly
+     * @name update()
+     * @param {{error: Error, caught: boolean, timestamp: Logger.LoggingTimestamp}} error error to log - if any
+     * @param {boolean} exiting true if program is exiting, false otherwise.
+     * @description updates and handles log file.
+     */
     private readonly update = (function () {
 
         var isBotSettingsDisplayed : boolean = false;
         var isWalletConfigDisplayed : boolean = false;
         var isTargetAddressDisplayed : boolean = false;
         var isTargetTimeDisplayed : boolean = false;
+
+        /**
+         * @description flagged to true in case of uncaught rejections/exceptions, sigint and process.exit([not 0])
+         */
         var fatalError : boolean = false;
         
         return function (error? : {error: Error, caught: boolean, timestamp: Logger.LoggingTimestamp}, exiting? : boolean) {
@@ -119,7 +152,7 @@ class logger {
     })();
 
     /**
-     * @function clearSensibleData() removes sensible data that may have been logged.
+     * @method clearSensibleData() removes sensible data that may have been logged.
      * @private
      */
     private clearSensibleData() {
@@ -142,9 +175,18 @@ class logger {
         this.full_path = this.path + this.filetimestamp.toString() + ".txt";
         fs.appendFileSync(this.full_path, `===LOG FILE CREATED AT TIMESTAMP ${this.filetimestamp}===\n\n`);
 
-        function exitHandler(exitCode: number) {      
+        /**
+         * @function exitHandler()
+         * @param {number} exitCode exit code.
+         * @description handles calls of process.exit().
+         */
+        function exitHandler(exitCode: number) {
+
+            //code -10: used internally to flag process.exit() called by others event handlers.
             if (exitCode == -10)      
-                process.exit();   
+                process.exit(); 
+                
+            //code 10: flags process.exit() called by bot itself during execution.
             else if (exitCode == 10) {
                 this.update({
                     error: new Error("exit(10) has been called. Program forcibly closed by itself."),
@@ -152,9 +194,13 @@ class logger {
                     timestamp: Logger.LoggingTimestamp.getTimestamp()
                 }, false);
             }
+
+            //no errors
             else if (exitCode == 0){
                 this.update(null, true);
             }
+
+            //other codes (external entities called process.exit())
             else {
                 this.update({
                     error: new Error(`exit(${exitCode}) has been called. Program forcibly closed by external entity.`),
@@ -165,6 +211,11 @@ class logger {
             process.exit();
         }
 
+        /**
+         * @function sigHandler()
+         * @param {any} sig type of SIG that has been invoked (e.g. SIGINT).
+         * @description handles SIG events.
+         */
         function sigHandler(sig : any) {
             this.update({
                 error: new Error(`Sig (${sig.toString()}) has been called. Program forcibly closed by external entity.`),
@@ -173,7 +224,12 @@ class logger {
             }, false);
             process.exit(-10);
         }
-
+        
+        /**
+         * @function uncaughtHandler()
+         * @param {Error} error unhandled error
+         * @description handles events "uncaughtException" and "unCaightRejection"
+         */
         function uncaughtHandler(error : Error) {            
             this.update({
                 error: error,
@@ -194,7 +250,7 @@ class logger {
     }
 
     /**
-     * @function getInstance() returns the only instance of Logger (singleton) 
+     * @method getInstance() returns the only instance of Logger (singleton) 
      * @returns {Logger} returns Logger.instance
      */
     public static getInstance() : logger {
@@ -206,7 +262,8 @@ class logger {
     }
 
     /**
-     * @function updateBotConfig()
+     * @method updateBotConfig()
+     * @public
      */
     public updateBotConfig(bot_settings : Map<string, boolean | number>) {
         this.bot_settings = {
@@ -217,7 +274,8 @@ class logger {
     }
 
     /**
-     * @function updateWalletConfig()
+     * @method updateWalletConfig()
+     * @public
      */
     public updateWalletConfig(wallet_config : Map<string, string>) {
         wallet_config.set('private_key', "CENSORED");
@@ -229,7 +287,8 @@ class logger {
     }
 
     /**
-     * @function updateAddress()
+     * @method updateAddress()
+     * @public
      */
     public updateAddress(address: string) {
         this.target_address = {
@@ -240,7 +299,8 @@ class logger {
     }
 
     /**
-     * @function updateTime()
+     * @method updateTime()
+     * @public
      */
     public updateTime(time: number) {
         this.target_time = {
@@ -251,7 +311,10 @@ class logger {
     }
 
     /**
-     * @function notifyHandledException() notifies the logger for handled exceptions.
+     * @method notifyHandledException()
+     * @public
+     * @description notifies the logger for handled exceptions.
+     * @param {Error} error error to notify.
      */
     public notifyHandledException(error : Error) {
         this.update({
@@ -265,12 +328,20 @@ class logger {
 }
 
 namespace Logger {
-
+    
+    /**
+     * @exports
+     * @class
+     * @name LoggingTimestamp
+     * @extends Object
+     * @description This class is used to define formatting of logs' timestamps.
+     */
     export class LoggingTimestamp extends Object {
 
         /**
          * @private
          * @readonly
+         * @property
          * @description will be a string of the format [hh:mm:ss:millis]
          */
         private readonly timestamp : string;
@@ -280,7 +351,7 @@ namespace Logger {
          * Private constructor of LoggingTimestamp class.
          * @constructor
          * @private
-         * @param {string} timestamp the timestamp string to set
+         * @param {string} timestamp the timestamp string returned by LoggingTimestamp.getTimestamp()
          */
         private constructor(timestamp : string) {
             super();
@@ -290,11 +361,13 @@ namespace Logger {
 
 
         /**
-         * @function getTimestamp()
+         * @method getTimestamp()
          * @returns {LoggingTimestamp} correct instance of LoggingTimestamp to use for logging.
          */
         public static getTimestamp() : LoggingTimestamp {
             let now : Date = new Date();
+
+            //Leading zeroes have to be manually inserted.
             return new LoggingTimestamp(`[${now.getHours() < 10 ? "0" + now.getHours().toString() : now.getHours()}:`+
                                         `${now.getMinutes() < 10 ? "0" + now.getMinutes().toString() : now.getMinutes()}:`+
                                         `${now.getSeconds() < 10 ? "0" + now.getSeconds().toString() : now.getSeconds()}:`+
@@ -303,7 +376,7 @@ namespace Logger {
         }
 
         /**
-         * @function toString()
+         * @method toString()
          * @override
          * @returns {string} returns correct string representation of LoggingTimestamp instance (the timestamp property) - if correctly set.
          */
@@ -315,20 +388,29 @@ namespace Logger {
 
     };
 
+    /**
+     * @exports
+     * @class
+     * @name FileTimestamp
+     * @extends Object
+     * @description This class is used to define formatting of log file's timestamp.
+     */
     export class FileTimestamp extends Object {
 
         /**
          * @private
          * @readonly
+         * @property
          * @description will be a string of the format ddmmyyyy-hhmmss
          */
          private readonly timestamp : string;
+
 
         /**
          * Private constructor of FileTimestamp class.
          * @constructor
          * @private
-         * @param {string} timestamp the timestamp string to set
+         * @param {string} timestamp the timestamp string returned by FileTimestamp.getTimestamp()
          */
          private constructor(timestamp : string) {
             super();
@@ -337,11 +419,13 @@ namespace Logger {
 
 
         /**
-         * @function getTimestamp()
+         * @method getTimestamp()
          * @returns {FileTimestamp} correct instance of FileTimestamp to use for log file's name.
          */
         public static getTimestamp() : FileTimestamp {
             let now : Date = new Date();
+
+            //leading zeroes have to be manually inserted
             return new FileTimestamp(`${now.getDay() < 10 ? "0" + now.getDay().toString() : now.getDay().toString()}`+
                                      `${now.getMonth() < 10 ? "0" + now.getMonth().toString() : now.getMonth().toString()}`+
                                      `${now.getFullYear()}-`+
@@ -351,7 +435,7 @@ namespace Logger {
         }
 
         /**
-         * @function toString()
+         * @method toString()
          * @override
          * @returns {sttring} returns correct string representation of FileTimestamp instance (the timestamp property) - if correctly set.
          */

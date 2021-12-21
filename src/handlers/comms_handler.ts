@@ -10,9 +10,21 @@ class CommsHandler {
 
     private signed_tx : [Promise<Object>] = [new Promise<Object>(function(){})];
     private private_keys : string[] = [];
-    private gas_price : string;
     private gas_amount : string;
     private target_contract : string;
+
+    /**
+     * @private
+     * @property
+     * @description GWEI per unit of gas
+     */
+    private gas_price : string;
+
+    /**
+     * @private
+     * @property
+     * @description amount in ETHER of BNB to send
+     */
     private amount : string;
 
     public readonly WBNB_ADDRESS : string;
@@ -66,7 +78,7 @@ class CommsHandler {
     }
 
     /**
-     * @function setTargetContract() sets contract to snipe.
+     * @method setTargetContract() sets contract to snipe.
      * @param {string} target_contract contract to snipe.
      * @returns {void}
      * @throws Will throw error if address not valid.
@@ -94,7 +106,7 @@ class CommsHandler {
 
     /**
      * @private
-     * @function verifyPrivateKey() check if private key is valid.
+     * @method verifyPrivateKey() check if private key is valid.
      * @param {string} private_key private key to verify. NOTE: remove '0x' prefix.
      * @returns {boolean} true if valid, false otherwise.
      * */
@@ -106,10 +118,11 @@ class CommsHandler {
         } catch (error) {
             return false;
         }
+
     }
     
     /**
-     * @function addPrivateKeys() set private keys to sign transaction with (ALL private keys will be used).
+     * @method addPrivateKeys() set private keys to sign transaction with (ALL private keys will be used).
      * @param {string[]} private_keys array of private keys to sign transaction with (ALL private keys will be used). NOTE: remove "0x" prefix.
      * @returns {void}
      * @throws Will throw error if private keys are not correct.
@@ -127,7 +140,7 @@ class CommsHandler {
     /**
      * @function preparePresaleTXs() prepare txs to sign
      * @returns {void}
-     * @throws Will throw error if gas settings are wrong.
+     * @throws Will throw error if gas settings are wrong (or other are incosistent).
      */
     //TODO: implementare logs degli errori col callback
     public preparePresaleTXs() : void {
@@ -148,7 +161,8 @@ class CommsHandler {
 
                 )
             );
-        })        
+        });
+
     }
 
     /**
@@ -235,11 +249,9 @@ class CommsHandler {
     }
 
     /**
-     * @function sendTXs() 
-     * @returns {void}
+     * @method sendTXs() 
      * @throws Will throw an error for wrong gas settings or insufficient balance.
      */
-    //TODO: implementare logs degli errori col callback
     public sendTXs(callback : Function) : void {
                 
         this.signed_tx.forEach(async (sig_tx: any) => {            
@@ -256,11 +268,12 @@ class CommsHandler {
                 console.log("Error during transaction execution. Details will follow.");
                 console.log(error);
             });
-        })
+        });
+        
     }
 
     /**
-     * @function subscribeNewBlocks()
+     * @method subscribeNewBlocks()
      * Triggers callback on new blocks.
      * @param {Function} callback callback function to be called on new blocks.
      */
