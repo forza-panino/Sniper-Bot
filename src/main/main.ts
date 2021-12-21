@@ -158,7 +158,7 @@ async function askTriggerTime() : Promise<Date> {
 
 async function askSwapPair() : Promise<string> {
     const rl = readline.createInterface({ input, output });
-    rl.setPrompt("Choose the pair; digit 1 for bnb or 2 for busd: ");
+    rl.setPrompt(language.lang.CHOOSE_PAIR);
     rl.prompt();
     var answer : string;
     var asking_confirmation : boolean = false;
@@ -169,14 +169,14 @@ async function askSwapPair() : Promise<string> {
                     //myLogger.updateAddress(answer);
                     if (!(answer === "1") && !(answer === "2")) {
                         asking_confirmation = false;
-                        rl.setPrompt("Not valid. Digit 1 for bnb or 2 for busd: ");
+                        rl.setPrompt(language.lang.PAIR_NOT_VALID);
                         rl.prompt();
                         continue;
                     }
                     return answer === "1" ? "bnb" : "busd";
                 case 'n':
                     asking_confirmation = false;
-                    rl.setPrompt("Choose the pair; digit 1 for bnb or 2 for busd: ");
+                    rl.setPrompt(language.lang.CHOOSE_PAIR);
                     rl.prompt();
                     continue;
                 default:

@@ -43,6 +43,14 @@ const lang = {
     TODAY_OR_TOMORROW: "Il bot effettuerà lo sniping oggi all'ora selezionata. Vuoi invece impostarlo per effettuare lo sniping domani? (y/n): ",
     BLOCK_QUERY_ERR: "C'è stato un errore nella richiesta del blocco",
     EOR: "Fine errore",
-    SHOULD_NOT_INTERFER: "NOTA: Se l'errore viene sollevato occasionalmente il bot dovrebbe poter ancora continuare a lavorare in tranquillità."
+    SHOULD_NOT_INTERFER: "NOTA: Se l'errore viene sollevato occasionalmente il bot dovrebbe poter ancora continuare a lavorare in tranquillità.",
+    CHOOSE_PAIR: "Scegliere la coppia; digitare 1 per bnb o 2 per busd: ",
+    PAIR_NOT_VALID: "Non valido; digitare 1 per bnb o 2 per busd: ",
+    WAITING_PAIR: "Aspettando che la coppia venga creata...",
+    WAITING_LIQ: "Pool di liquidità creata. aspettando che la liquidità venga immessa...",
+    LIQ_ADDED: "C'è liquidita, provo lo swap...",
+    WAITING_BLOCKCHAIN_CONFIRM: "Aspettando conferma dalla blockchain...",
+    TX_CONFIRMED: "Transazione confermata.",
+    TX_ERROR: "Errore durante l'esecuzione della transazione. Di seguito i dettagli."
 };
 export default {lang}

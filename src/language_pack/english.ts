@@ -43,6 +43,14 @@ const lang = {
     TODAY_OR_TOMORROW: "The bot will snipe at the given time today. Do you want to set it to snipe tomorrow instead? (y/n): ",
     BLOCK_QUERY_ERR: "Error occurred quering the block",
     EOR: "End of error",
-    SHOULD_NOT_INTERFER: "NOTE: If the error occurs occasionally the bot should still continue running smoothly"
+    SHOULD_NOT_INTERFER: "NOTE: If the error occurs occasionally the bot should still continue running smoothly",
+    CHOOSE_PAIR: "Choose the pair; digit 1 for bnb or 2 for busd: ",
+    PAIR_NOT_VALID: "Not valid. Digit 1 for bnb or 2 for busd: ",
+    WAITING_PAIR: "Waiting for pair to be created...",
+    WAITING_LIQ: "Liquidity pool now exists. Waiting for liquidity to be added...",
+    LIQ_ADDED: "Liquidity found, trying swap...",
+    WAITING_BLOCKCHAIN_CONFIRM: "Waiting for blockchain confirmation...",
+    TX_CONFIRMED: "Transaction confirmed.",
+    TX_ERROR: "Error during transaction execution. Details will follow."
 };
 export default {lang}

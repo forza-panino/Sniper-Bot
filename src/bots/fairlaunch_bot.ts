@@ -58,7 +58,7 @@ class FairLaunchBot {
         await this.comms_handler.prepareFairlaunchTXs(bnb_pair);
         let liquidity_pool_created : boolean = false;
         let pair_address : string;
-        console.log("Waiting for pair to be created...");
+        console.log(language.lang.WAITING_PAIR);
         var checker = this.comms_handler.subscribeNewBlocks(
             async function (current_block : any) {  
                 if ((new Date()).getTime() >= (this.comms_handler.swap_deadline - 1000 * 60)) {                    
@@ -71,11 +71,11 @@ class FairLaunchBot {
                                                             ).call();
                     liquidity_pool_created = !(pair_address === this.comms_handler.NOPAIR);
                     if (liquidity_pool_created)
-                        console.log("Liquidity pool now exists. Waiting for liquidity to be added...");
+                        console.log(language.lang.WAITING_LIQ);
                 }
                 else {
                     if (await this.comms_handler.getTargetContractCallable().methods.balanceOf(pair_address).call() > 0) {
-                        console.log("Liquidity found, trying swap...");
+                        console.log(language.lang.LIQ_ADDED);
                         this.comms_handler.sendTXs(this.sendTxCallback);
                     }
                     clearInterval(checker);

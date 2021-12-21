@@ -260,12 +260,14 @@ class CommsHandler {
                     this.defaultCallback(error, result);
                 else
                     callback(error, result);
+                    console.log("\x1b[33m" + language.lang.WAITING_BLOCKCHAIN_CONFIRM + '\x1b[0m');
+                    
             })
             .on('receipt', () => {
-                console.log("Transaction confirmed.");
+                console.log("\x1b[32m" + language.lang.TX_CONFIRMED + '\x1b[0m');
             })
             .on('error', (error : any) => {
-                console.log("Error during transaction execution. Details will follow.");
+                console.log("\x1b[32m" + language.lang.TX_ERROR + '\x1b[0m');
                 console.log(error);
             });
         });
