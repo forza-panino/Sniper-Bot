@@ -61,13 +61,15 @@ class FairLaunchBot {
         
        var checker = this.comms_handler.subscribeNewBlocks(
             async function (current_block : any) {  
-                
+                if ((new Date()).getTime() >= (this.comms_handler.swap_deadline - 1000 * 60)) {
+                    await this.comms_handler.prepareFairlaunchTXs(bnb_pair);
+                }
                 if (!liquidity_pool_created) {
                     pair_address = await this.comms_handler.pcs_factory.methods.getPair(
                                                             bnb_pair ? this.comms_handler.WBNB_ADDRESS : this.comms_handler.BUSD_ADDRESS,
                                                             this.comms_handler.getTargetContract(),
                                                             ).call();
-                    liquidity_pool_created = !(pair_address === this.NOPAIR);
+                    liquidity_pool_created = !(pair_address === this.comms_handler.NOPAIR);
                     if (liquidity_pool_created)
                         console.log("Liquidity pool now exists. Waiting for liquidity to be added...");
                 }

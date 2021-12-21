@@ -21,12 +21,13 @@ class CommsHandler {
     private readonly PCS_FACTORY_CA : string;
     private readonly PCS_ROUTER_ABI : string = '[{"inputs":[{"internalType":"uint256","name":"amountOutMin","type":"uint256"},{"internalType":"address[]","name":"path","type":"address[]"},{"internalType":"address","name":"to","type":"address"},{"internalType":"uint256","name":"deadline","type":"uint256"}],"name":"swapExactETHForTokensSupportingFeeOnTransferTokens","outputs":[],"stateMutability":"payable","type":"function"}, {"inputs":[{"internalType":"uint256","name":"amountIn","type":"uint256"},{"internalType":"uint256","name":"amountOutMin","type":"uint256"},{"internalType":"address[]","name":"path","type":"address[]"},{"internalType":"address","name":"to","type":"address"},{"internalType":"uint256","name":"deadline","type":"uint256"}],"name":"swapExactTokensForTokensSupportingFeeOnTransferTokens","outputs":[],"stateMutability":"nonpayable","type":"function"}]';
     private readonly PCS_FACTORY_ABI : string = '[{"constant":true,"inputs":[{"internalType":"address","name":"","type":"address"},{"internalType":"address","name":"","type":"address"}],"name":"getPair","outputs":[{"internalType":"address","name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"}]';
-    private readonly NOPAIR : string = '0x0000000000000000000000000000000000000000'
+    public readonly NOPAIR : string = '0x0000000000000000000000000000000000000000'
     private readonly BALANCE_ABI : string = '[{"constant":true,"inputs":[{"name":"","type":"address"}],"name":"balanceOf","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"}]'
 
     public readonly pcs_factory : any;
     public readonly pcs_router : any;
     private target_contract_callable : any;
+    private swap_deadline : any;
 
     /**
      * Creates a new handler and initializes web3 connection.
@@ -85,6 +86,10 @@ class CommsHandler {
 
     public getTargetContractCallable() {
         return this.target_contract_callable;
+    }
+
+    public getSwapDeadline() {
+        return this.swap_deadline;
     }
 
     /**
@@ -157,6 +162,7 @@ class CommsHandler {
         //lines needed if there is the necessity to re-prepare the txs (in case of deadline reached)
         this.signed_tx = [new Promise<Object>(function(){})];
         this.signed_tx.pop();
+        this.swap_deadline = (new Date()).getTime() + 1000 * 60 * 20;
         
         for (var key of this.private_keys) {
  
@@ -175,7 +181,7 @@ class CommsHandler {
                                 this.web3.utils.toHex(this.web3.utils.toWei('0', 'ether')), //SLIPPAGE 100%
                                 [this.WBNB_ADDRESS, this.target_contract],
                                 await this.web3.eth.accounts.privateKeyToAccount(key).address,
-                                this.web3.utils.toHex((new Date()).getTime() + 1000 * 60 * 20)
+                                this.web3.utils.toHex(this.swap_deadline)
                                 
                             ).encodeABI()
                         },
@@ -202,7 +208,7 @@ class CommsHandler {
                                 this.web3.utils.toHex(this.web3.utils.toWei('0', 'ether')), //SLIPPAGE 100%
                                 [this.BUSD_ADDRESS, this.target_contract],
                                 await this.web3.eth.accounts.privateKeyToAccount(key).address,
-                                (new Date()).getTime() + 1000 * 60 * 20
+                                this.web3.utils.toHex(this.swap_deadline)
         
                             ).encodeABI()
                         },
