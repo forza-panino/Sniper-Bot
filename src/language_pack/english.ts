@@ -48,7 +48,8 @@ const lang = {
     PAIR_NOT_VALID: "Not valid. Digit 1 for bnb or 2 for busd: ",
     WAITING_PAIR: "Waiting for pair to be created...",
     WAITING_LIQ: "Liquidity pool now exists. Waiting for liquidity to be added...",
-    LIQ_ADDED: "Liquidity found, trying swap...",
+    LIQ_ADDED_TRYING_SWAP: "Liquidity found, trying swap...",
+    LIQ_ADDED_WAITING: "Liquidity found, waiting the desired number of blocks...",
     WAITING_BLOCKCHAIN_CONFIRM: "Waiting for blockchain confirmation...",
     TX_CONFIRMED: "Transaction confirmed.",
     TX_ERROR: "Error during transaction execution. Details will follow."

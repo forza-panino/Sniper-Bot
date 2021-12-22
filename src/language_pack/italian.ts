@@ -48,7 +48,8 @@ const lang = {
     PAIR_NOT_VALID: "Non valido; digitare 1 per bnb o 2 per busd: ",
     WAITING_PAIR: "Aspettando che la coppia venga creata...",
     WAITING_LIQ: "Pool di liquidità creata. aspettando che la liquidità venga immessa...",
-    LIQ_ADDED: "C'è liquidita, provo lo swap...",
+    LIQ_ADDED_TRYING_SWAP: "C'è liquidita, provo lo swap...",
+    LIQ_ADDED_WAITING: "C'è liquidità, aspetto il numero di blocchi desiderato...",
     WAITING_BLOCKCHAIN_CONFIRM: "Aspettando conferma dalla blockchain...",
     TX_CONFIRMED: "Transazione confermata.",
     TX_ERROR: "Errore durante l'esecuzione della transazione. Di seguito i dettagli."
