@@ -10,10 +10,36 @@ class CommsHandler {
 
     private signed_tx : [Promise<Object>] = [new Promise<Object>(function(){})];
     private private_keys : string[] = [];
-    private gas_price : string;
     private gas_amount : string;
     private target_contract : string;
+
+    /**
+     * @private
+     * @property
+     * @description GWEI per unit of gas
+     */
+    private gas_price : string;
+
+    /**
+     * @private
+     * @property
+     * @description amount in ETHER of BNB to send
+     */
     private amount : string;
+
+    public readonly WBNB_ADDRESS : string;
+    public readonly BUSD_ADDRESS : string;
+    private readonly PCS_ROUTER_CA : string;
+    private readonly PCS_FACTORY_CA : string;
+    private readonly PCS_ROUTER_ABI : string = '[{"inputs":[{"internalType":"uint256","name":"amountOutMin","type":"uint256"},{"internalType":"address[]","name":"path","type":"address[]"},{"internalType":"address","name":"to","type":"address"},{"internalType":"uint256","name":"deadline","type":"uint256"}],"name":"swapExactETHForTokensSupportingFeeOnTransferTokens","outputs":[],"stateMutability":"payable","type":"function"}, {"inputs":[{"internalType":"uint256","name":"amountIn","type":"uint256"},{"internalType":"uint256","name":"amountOutMin","type":"uint256"},{"internalType":"address[]","name":"path","type":"address[]"},{"internalType":"address","name":"to","type":"address"},{"internalType":"uint256","name":"deadline","type":"uint256"}],"name":"swapExactTokensForTokensSupportingFeeOnTransferTokens","outputs":[],"stateMutability":"nonpayable","type":"function"}]';
+    private readonly PCS_FACTORY_ABI : string = '[{"constant":true,"inputs":[{"internalType":"address","name":"","type":"address"},{"internalType":"address","name":"","type":"address"}],"name":"getPair","outputs":[{"internalType":"address","name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"}]';
+    public readonly NOPAIR : string = '0x0000000000000000000000000000000000000000'
+    private readonly BALANCE_ABI : string = '[{"constant":true,"inputs":[{"name":"","type":"address"}],"name":"balanceOf","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"}]'
+
+    public readonly pcs_factory : any;
+    public readonly pcs_router : any;
+    private target_contract_callable : any;
+    private swap_deadline : any;
 
     /**
      * Creates a new handler and initializes web3 connection.
@@ -23,18 +49,36 @@ class CommsHandler {
      * @param {number} gas_amount amount of gas in gwei.
      * @param {string} amount amount to buy.
      * */
-    constructor(useTestnet : boolean = false, gas_price : string = '5', gas_amount : string = '500000', amount : string) {
-       this.HTTP_PROVIDER = (useTestnet ? "https://data-seed-prebsc-1-s1.binance.org:8545" : "https://bsc-dataseed1.binance.org:443");
-       this.CHAIN_ID = (useTestnet ? 97 : 56);
-       this.web3 = new Web3(new Web3.providers.HttpProvider(this.HTTP_PROVIDER));
-       this.gas_price = gas_price;
-       this.gas_amount = gas_amount;
-       this.amount = amount;
-       this.signed_tx.pop();
+    constructor(useTestnet : boolean = false, gas_price : string = '10', gas_amount : string = '500000', amount : string) {
+
+        this.HTTP_PROVIDER = (useTestnet ? "https://data-seed-prebsc-1-s1.binance.org:8545" : "https://bsc-dataseed1.binance.org:443");
+        this.CHAIN_ID = (useTestnet ? 97 : 56);
+        this.web3 = new Web3(new Web3.providers.HttpProvider(this.HTTP_PROVIDER));
+        this.gas_price = gas_price;
+        this.gas_amount = gas_amount;
+        this.amount = amount;
+        this.signed_tx.pop();
+
+        if (useTestnet) {
+            this.WBNB_ADDRESS = "0xae13d989dac2f0debff460ac112a837c89baa7cd";
+            this.BUSD_ADDRESS = "0x78867BbEeF44f2326bF8DDd1941a4439382EF2A7";
+            this.PCS_ROUTER_CA = "0x9Ac64Cc6e4415144C455BD8E4837Fea55603e5c3";
+            this.PCS_FACTORY_CA = "0x6725F303b657a9451d8BA641348b6761A6CC7a17";
+        }
+        else {
+            this.WBNB_ADDRESS = "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c";
+            this.BUSD_ADDRESS = "0xe9e7cea3dedca5984780bafc599bd69add087d56";
+            this.PCS_ROUTER_CA = "0x10ED43C718714eb63d5aA57B78B54704E256024E";
+            this.PCS_FACTORY_CA = "0xcA143Ce32Fe78f1f7019d7d551a6402fC5350c73";
+        }
+
+        this.pcs_factory = new this.web3.eth.Contract(JSON.parse(this.PCS_FACTORY_ABI), this.PCS_FACTORY_CA);
+        this.pcs_router = new this.web3.eth.Contract(JSON.parse(this.PCS_ROUTER_ABI), this.PCS_ROUTER_CA);
+
     }
 
     /**
-     * @function setTargetContract() sets contract to snipe.
+     * @method setTargetContract() sets contract to snipe.
      * @param {string} target_contract contract to snipe.
      * @returns {void}
      * @throws Will throw error if address not valid.
@@ -45,11 +89,24 @@ class CommsHandler {
             throw new Error(language.lang.ADDR_NOT_VALID);
             
         this.target_contract = target_contract;
+        this.target_contract_callable = new this.web3.eth.Contract(JSON.parse(this.BALANCE_ABI), this.target_contract);
+    }
+
+    public getTargetContract() : string {
+        return this.target_contract;
+    }
+
+    public getTargetContractCallable() {
+        return this.target_contract_callable;
+    }
+
+    public getSwapDeadline() {
+        return this.swap_deadline;
     }
 
     /**
      * @private
-     * @function verifyPrivateKey() check if private key is valid.
+     * @method verifyPrivateKey() check if private key is valid.
      * @param {string} private_key private key to verify. NOTE: remove '0x' prefix.
      * @returns {boolean} true if valid, false otherwise.
      * */
@@ -61,10 +118,11 @@ class CommsHandler {
         } catch (error) {
             return false;
         }
+
     }
     
     /**
-     * @function addPrivateKeys() set private keys to sign transaction with (ALL private keys will be used).
+     * @method addPrivateKeys() set private keys to sign transaction with (ALL private keys will be used).
      * @param {string[]} private_keys array of private keys to sign transaction with (ALL private keys will be used). NOTE: remove "0x" prefix.
      * @returns {void}
      * @throws Will throw error if private keys are not correct.
@@ -80,12 +138,12 @@ class CommsHandler {
     }
 
     /**
-     * @function prepareTXs() prepare txs to sign
+     * @function preparePresaleTXs() prepare txs to sign
      * @returns {void}
-     * @throws Will throw error if gas settings are wrong.
+     * @throws Will throw error if gas settings are wrong (or other are incosistent).
      */
     //TODO: implementare logs degli errori col callback
-    public prepareTXs() : void {
+    public preparePresaleTXs() : void {
         
         this.private_keys.forEach((key : string) => {
 
@@ -103,7 +161,78 @@ class CommsHandler {
 
                 )
             );
-        })        
+        });
+
+    }
+
+    /**
+     * @function prepareFairlaunchTXs() prepare txs to sign
+     * @returns {void}
+     * @throws Will throw error if gas settings are wrong.
+     */
+    //TODO: implementare logs degli errori col callback
+    public async prepareFairlaunchTXs(bnb_pair : boolean) {
+        
+        //lines needed if there is the necessity to re-prepare the txs (in case of deadline reached)
+        this.signed_tx = [new Promise<Object>(function(){})];
+        this.signed_tx.pop();
+        this.swap_deadline = (new Date()).getTime() + 1000 * 60 * 20;
+        
+        for (var key of this.private_keys) {
+ 
+            if (bnb_pair) {
+                this.signed_tx.push(
+                    this.web3.eth.accounts.signTransaction(
+                        {
+                            'from': await this.web3.eth.accounts.privateKeyToAccount(key).address,
+                            'to': this.PCS_ROUTER_CA,
+                            'value': this.web3.utils.toHex(this.web3.utils.toWei(this.amount, 'ether')),
+                            'chainId': this.CHAIN_ID,
+                            'gas': this.web3.utils.toHex(this.gas_amount),
+                            'gasPrice': this.web3.utils.toHex(this.web3.utils.toWei(this.gas_price, 'gwei')),
+                            'data': this.pcs_router.methods.swapExactETHForTokensSupportingFeeOnTransferTokens(
+            
+                                this.web3.utils.toHex(this.web3.utils.toWei('0', 'ether')), //SLIPPAGE 100%
+                                [this.WBNB_ADDRESS, this.target_contract],
+                                await this.web3.eth.accounts.privateKeyToAccount(key).address,
+                                this.web3.utils.toHex(this.swap_deadline)
+                                
+                            ).encodeABI()
+                        },
+                        key,
+                        null
+                    )
+                );                
+            }
+            
+
+            else {
+                this.signed_tx.push(
+                    this.web3.eth.accounts.signTransaction(
+
+                        {
+                            'from': await this.web3.eth.accounts.privateKeyToAccount(key).address,
+                            'to': this.PCS_ROUTER_CA,
+                            'chainId': this.CHAIN_ID,
+                            'gas': this.web3.utils.toHex(this.gas_amount),
+                            'gasPrice': this.web3.utils.toHex(this.web3.utils.toWei(this.gas_price, 'gwei')),
+                            'data': this.pcs_router.methods.swapExactTokensForTokensSupportingFeeOnTransferTokens(
+                
+                                this.web3.utils.toHex(this.web3.utils.toWei(this.amount, 'ether')),
+                                this.web3.utils.toHex(this.web3.utils.toWei('0', 'ether')), //SLIPPAGE 100%
+                                [this.BUSD_ADDRESS, this.target_contract],
+                                await this.web3.eth.accounts.privateKeyToAccount(key).address,
+                                this.web3.utils.toHex(this.swap_deadline)
+        
+                            ).encodeABI()
+                        },
+                        key,
+                        null
+                    )
+                );
+            }
+            
+        } 
     }
 
     /**
@@ -120,25 +249,33 @@ class CommsHandler {
     }
 
     /**
-     * @function sendTXs() 
-     * @returns {void}
+     * @method sendTXs() 
      * @throws Will throw an error for wrong gas settings or insufficient balance.
      */
-    //TODO: implementare logs degli errori col callback
     public sendTXs(callback : Function) : void {
                 
-        this.signed_tx.forEach(async (sig_tx: any) => {
+        this.signed_tx.forEach(async (sig_tx: any) => {            
             this.web3.eth.sendSignedTransaction((await sig_tx).rawTransaction, (error : Error, result : any) => {
                 if (!callback)
                     this.defaultCallback(error, result);
                 else
                     callback(error, result);
+                    console.log("\x1b[33m" + language.lang.WAITING_BLOCKCHAIN_CONFIRM + '\x1b[0m');
+                    
+            })
+            .on('receipt', () => {
+                console.log("\x1b[32m" + language.lang.TX_CONFIRMED + '\x1b[0m');
+            })
+            .on('error', (error : any) => {
+                console.log("\x1b[32m" + language.lang.TX_ERROR + '\x1b[0m');
+                console.log(error);
             });
-        })
+        });
+        
     }
 
     /**
-     * @function subscribeNewBlocks()
+     * @method subscribeNewBlocks()
      * Triggers callback on new blocks.
      * @param {Function} callback callback function to be called on new blocks.
      */

@@ -5,7 +5,7 @@
   "main": "out/main.js",
   "config": {
     "language": "en",
-    "debug": true
+    "debug": false
   },
   "scripts": {
     "install": "npm install typescript --save-dev && npm install web3",
