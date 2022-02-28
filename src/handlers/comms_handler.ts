@@ -68,7 +68,8 @@ class CommsHandler {
             this.WBNB_ADDRESS = "0xae13d989dac2f0debff460ac112a837c89baa7cd";
             this.BUSD_ADDRESS = "0x78867BbEeF44f2326bF8DDd1941a4439382EF2A7";
             this.PCS_ROUTER_CA = "0x9Ac64Cc6e4415144C455BD8E4837Fea55603e5c3";
-            this.PCS_FACTORY_CA = "0x6725F303b657a9451d8BA641348b6761A6CC7a17";
+            //this.PCS_FACTORY_CA = "0x6725F303b657a9451d8BA641348b6761A6CC7a17";
+            this.PCS_FACTORY_CA = "0xB7926C0430Afb07AA7DEfDE6DA862aE0Bde767bc";
         }
         else {
             this.WBNB_ADDRESS = "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c";

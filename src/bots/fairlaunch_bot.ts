@@ -61,15 +61,16 @@ class FairLaunchBot {
         let target_block : number;
         let armed : boolean = false;
         console.log('\x1b[36m' + language.lang.WAITING_PAIR + '\x1b[0m');
-        var checker = this.comms_handler.subscribeNewBlocks(
+        var subscription = this.comms_handler.subscribeNewBlocks(
             async function (current_block : any) {  
                 if ((new Date()).getTime() >= (this.comms_handler.swap_deadline - 1000 * 60)) {                    
                     await this.comms_handler.prepareFairlaunchTXs(bnb_pair);
+                    console.log("rebuilding txs...");
                 }
                 if (armed) {
-                    if (current_block['number'] === target_block) {
+                    if (current_block.number === target_block) {
                         this.comms_handler.sendTXs(this.sendTxCallback);
-                        clearInterval(checker);
+                        await subscription.unsubscribe();
                     }
                 }
                 else if (!liquidity_pool_created) {                    
@@ -77,19 +78,23 @@ class FairLaunchBot {
                                                             bnb_pair ? this.comms_handler.WBNB_ADDRESS : this.comms_handler.BUSD_ADDRESS,
                                                             this.comms_handler.getTargetContract(),
                                                             ).call();
+                    //console.log("address: " + pair_address);
+                    
                     liquidity_pool_created = !(pair_address === this.comms_handler.NOPAIR);
                     if (liquidity_pool_created)
                         console.log('\x1b[36m' + language.lang.WAITING_LIQ + '\x1b[0m');
                 }
                 else {
+                    //console.log("balance: " + await this.comms_handler.getTargetContractCallable().methods.balanceOf(pair_address).call());
+                    
                     if (await this.comms_handler.getTargetContractCallable().methods.balanceOf(pair_address).call() > 0) {
                         if (this.delay === 0) {
                             console.log('\x1b[36m' + language.lang.LIQ_ADDED_TRYING_SWAP + '\x1b[0m');
                             this.comms_handler.sendTXs(this.sendTxCallback);
-                            clearInterval(checker);
+                            await subscription.unsubscribe();
                         }
                         else {
-                            target_block = current_block['number'] + this.delay;
+                            target_block = current_block.number + this.delay;
                             armed = true;
                             console.log('\x1b[36m' + language.lang.LIQ_ADDED_WAITING + '\x1b[0m');
                         }
