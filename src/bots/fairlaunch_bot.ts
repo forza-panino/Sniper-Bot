@@ -78,14 +78,21 @@ class FairLaunchBot {
                                                             bnb_pair ? this.comms_handler.WBNB_ADDRESS : this.comms_handler.BUSD_ADDRESS,
                                                             this.comms_handler.getTargetContract(),
                                                             ).call();
-                    //console.log("address: " + pair_address);
                     
                     liquidity_pool_created = !(pair_address === this.comms_handler.NOPAIR);
-                    if (liquidity_pool_created)
+                    if (liquidity_pool_created){
                         console.log('\x1b[36m' + language.lang.WAITING_LIQ + '\x1b[0m');
+                        if (await this.comms_handler.getTargetContractCallable().methods.balanceOf(pair_address).call() > 0) {
+                            console.log("NOT WAITED FOR NEXT BLOCK");
+                            if (this.delay === 0) {
+                                console.log('\x1b[36m' + language.lang.LIQ_ADDED_TRYING_SWAP + '\x1b[0m');
+                                this.comms_handler.sendTXs(this.sendTxCallback);
+                                await subscription.unsubscribe();
+                            }
+                        }
+                    }
                 }
                 else {
-                    //console.log("balance: " + await this.comms_handler.getTargetContractCallable().methods.balanceOf(pair_address).call());
                     
                     if (await this.comms_handler.getTargetContractCallable().methods.balanceOf(pair_address).call() > 0) {
                         if (this.delay === 0) {
