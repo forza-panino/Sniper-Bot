@@ -2,9 +2,14 @@ import language from "../language_pack/selected_language"
 import { logger } from "../logger/logger";
 const Web3 = require('web3');
 
+const fs = require('fs');
+const path = require('path');
+const configs_path : string = path.join(__dirname, "..", "..", "configs", "websocket_config.json");
+const ws = new Map(JSON.parse(fs.readFileSync(configs_path)));
+
 class CommsHandler {
     
-    public readonly HTTP_PROVIDER : string; 
+    public readonly WEBSOCKET_PROVIDER : any; 
     public readonly CHAIN_ID : number;
     public readonly web3;
 
@@ -51,9 +56,9 @@ class CommsHandler {
      * */
     constructor(useTestnet : boolean = false, gas_price : string = '10', gas_amount : string = '500000', amount : string) {
 
-        this.HTTP_PROVIDER = (useTestnet ? "https://data-seed-prebsc-1-s1.binance.org:8545" : "https://bsc-dataseed1.binance.org:443");
+        this.WEBSOCKET_PROVIDER = (useTestnet ? ws.get("test") : ws.get("main") );
         this.CHAIN_ID = (useTestnet ? 97 : 56);
-        this.web3 = new Web3(new Web3.providers.HttpProvider(this.HTTP_PROVIDER));
+        this.web3 = new Web3(new Web3.providers.WebsocketProvider(this.WEBSOCKET_PROVIDER));
         this.gas_price = gas_price;
         this.gas_amount = gas_amount;
         this.amount = amount;
