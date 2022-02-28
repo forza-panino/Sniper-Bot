@@ -284,28 +284,19 @@ class CommsHandler {
      * Triggers callback on new blocks.
      * @param {Function} callback callback function to be called on new blocks.
      */
-    public subscribeNewBlocks(callback : Function) : NodeJS.Timeout {
+    public subscribeNewBlocks(callback : Function) : any {
 
-        var previous_block : number;        
-        return setInterval(
-            async function (){
-                try {
-                    let current_block : number = await this.web3.eth.getBlockNumber();
+        var previous_block : number;  
+        
+        return this.web3.eth.subscribe('newBlockHeaders', function (err: any, result: any) {
+            if(!err) {
+                let current_block : number = result.number;
                     if (current_block > previous_block || previous_block == undefined) {
                         previous_block = current_block;
-                        callback(await this.web3.eth.getBlock('latest'));
+                        callback(result);
                     }
-                } catch (err : any) {
-                    logger.getInstance().notifyHandledException(err);
-                    console.warn("====================" + language.lang.BLOCK_QUERY_ERR + "====================");
-                    console.warn(err);
-                    console.warn("====================" + language.lang.EOR + "====================");
-                    console.warn(language.lang.SHOULD_NOT_INTERFER);
-                }
-                
-            }.bind(this)
-            , 100
-        ) ;
+            }
+        });
 
     }
 }

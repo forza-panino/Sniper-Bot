@@ -80,24 +80,24 @@ class PresaleBot {
         var target_block : number;
         var time_triggered : boolean = false;
         console.log(language.lang.WAITING);
-        var checker = this.comms_handler.subscribeNewBlocks(
-            function (current_block : any) {                
+        var subscription = this.comms_handler.subscribeNewBlocks(
+            async function (current_block : any) {                
                 if (!time_triggered) {
-                    if (current_block['timestamp'] >= this.trigger_time) {
+                    if (current_block.timestamp >= this.trigger_time) {
                         time_triggered = true;
                         if (this.delay == 0) {
                             this.comms_handler.sendTXs(this.sendTxCallback);
-                            clearInterval(checker);
+                            await subscription.unsubscribe();
                             return;
                         }
-                        target_block = current_block['number'] + this.delay;
+                        target_block = current_block.number + this.delay;
                         console.log(language.lang.ARMED);                        
                     }             
                 }
                 else {
-                    if (current_block['number'] >= target_block) {
+                    if (current_block.number >= target_block) {
                         this.comms_handler.sendTXs(this.sendTxCallback);
-                        clearInterval(checker);
+                        await subscription.unsubscribe();
                     }
                 }
             }.bind(this));
