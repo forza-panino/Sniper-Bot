@@ -61,9 +61,9 @@ class FairLaunchBot {
         let target_block : number;
         let armed : boolean = false;
         console.log('\x1b[36m' + language.lang.WAITING_PAIR + '\x1b[0m');
-        var subscription = this.comms_handler.subscribeNewBlocks(
+        var subscription = this.comms_handler.subscribePendingTXs(
             async function (current_block : any) {  
-                if ((new Date()).getTime() >= (this.comms_handler.swap_deadline - 1000 * 60)) {                    
+                /*if ((new Date()).getTime() >= (this.comms_handler.swap_deadline - 1000 * 60)) {                    
                     await this.comms_handler.prepareFairlaunchTXs(bnb_pair);
                     console.log("rebuilding txs...");
                 }
@@ -107,7 +107,7 @@ class FairLaunchBot {
                         }
                     }
                     
-                }
+                }*/
 
             }.bind(this));
     }
