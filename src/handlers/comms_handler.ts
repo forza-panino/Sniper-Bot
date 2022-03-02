@@ -306,31 +306,10 @@ class CommsHandler {
         var previous_block : number;  
         return this.web3.eth.subscribe('pendingTransactions', async function (err: any, result: any) {
             if(!err) {
-                /*let current_block : number = result.number;
-                    if (current_block > previous_block || previous_block == undefined) {
-                        previous_block = current_block;
-                        callback(result);
-                    }*/                
                 var tx = await this.web3.eth.getTransaction(result);
-                if (tx.from === this.PCS_ROUTER_CA) {
-                    if (tx.input.slice(10) === "0xf305d719") {
-                        console.log(tx);
-                        
-                    }
-                    
-                }
+                callback(tx);
             }
         });
-        return this.web3.eth.subscribe('newBlockHeaders', function (err: any, result: any) {
-            if(!err) {
-                let current_block : number = result.number;
-                    if (current_block > previous_block || previous_block == undefined) {
-                        previous_block = current_block;
-                        callback(result);
-                    }
-            }
-        });
-
     }
 }
 

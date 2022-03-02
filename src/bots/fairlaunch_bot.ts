@@ -56,59 +56,38 @@ class FairLaunchBot {
      public async startSniping(bnb_pair : boolean) {
 
         await this.comms_handler.prepareFairlaunchTXs(bnb_pair);
-        let liquidity_pool_created : boolean = false;
-        let pair_address : string;
-        let target_block : number;
-        let armed : boolean = false;
         console.log('\x1b[36m' + language.lang.WAITING_PAIR + '\x1b[0m');
         var subscription = this.comms_handler.subscribePendingTXs(
-            async function (current_block : any) {  
-                /*if ((new Date()).getTime() >= (this.comms_handler.swap_deadline - 1000 * 60)) {                    
+            async function (tx : any) { 
+                if (!tx || !tx.to)
+                    return;
+                if ((new Date()).getTime() >= (this.comms_handler.swap_deadline - 1000 * 60)) {                    
                     await this.comms_handler.prepareFairlaunchTXs(bnb_pair);
                     console.log("rebuilding txs...");
                 }
-                if (armed) {
-                    if (current_block.number === target_block) {
-                        this.comms_handler.sendTXs(this.sendTxCallback);
-                        await subscription.unsubscribe();
-                    }
-                }
-                else if (!liquidity_pool_created) {                    
-                    pair_address = await this.comms_handler.pcs_factory.methods.getPair(
-                                                            bnb_pair ? this.comms_handler.WBNB_ADDRESS : this.comms_handler.BUSD_ADDRESS,
-                                                            this.comms_handler.getTargetContract(),
-                                                            ).call();
-                    
-                    liquidity_pool_created = !(pair_address === this.comms_handler.NOPAIR);
-                    if (liquidity_pool_created){
-                        console.log('\x1b[36m' + language.lang.WAITING_LIQ + '\x1b[0m');
-                        if (await this.comms_handler.getTargetContractCallable().methods.balanceOf(pair_address).call() > 0) {
-                            console.log("NOT WAITED FOR NEXT BLOCK");
-                            if (this.delay === 0) {
-                                console.log('\x1b[36m' + language.lang.LIQ_ADDED_TRYING_SWAP + '\x1b[0m');
-                                this.comms_handler.sendTXs(this.sendTxCallback);
-                                await subscription.unsubscribe();
+                if (bnb_pair) {
+                    if (tx.to.toLowerCase() === this.comms_handler.PCS_ROUTER_CA.toLowerCase()) {
+                        if (tx.input.slice(0,10).toLowerCase() === "0xf305d719") {
+                            if (tx.input.slice(35, 74)) {
+                                console.log(tx.input.slice(35, 74));
+                                console.log(tx.hash);
                             }
                         }
                     }
                 }
                 else {
-                    
-                    if (await this.comms_handler.getTargetContractCallable().methods.balanceOf(pair_address).call() > 0) {
-                        if (this.delay === 0) {
-                            console.log('\x1b[36m' + language.lang.LIQ_ADDED_TRYING_SWAP + '\x1b[0m');
-                            this.comms_handler.sendTXs(this.sendTxCallback);
-                            await subscription.unsubscribe();
-                        }
-                        else {
-                            target_block = current_block.number + this.delay;
-                            armed = true;
-                            console.log('\x1b[36m' + language.lang.LIQ_ADDED_WAITING + '\x1b[0m');
+                    if (tx.to.toLowerCase() === this.comms_handler.PCS_ROUTER_CA.toLowerCase()) {
+                        if (tx.input.slice(0,10).toLowerCase() === "0xe8e33700") {
+                            if (tx.input.slice(35, 74)) {
+                                console.log(tx.input.slice(35, 74));
+                                console.log(tx.hash);
+                            }
                         }
                     }
-                    
-                }*/
-
+                }
+                /*if ()
+                    this.comms_handler.sendTXs(this.sendTxCallback);
+                    await subscription.unsubscribe();*/
             }.bind(this));
     }
 
