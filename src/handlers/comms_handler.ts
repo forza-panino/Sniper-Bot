@@ -309,7 +309,7 @@ class CommsHandler {
                 var tx = await this.web3.eth.getTransaction(result);
                 callback(tx);
             }
-        });
+        }.bind(this));
     }
 }
 
