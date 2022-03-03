@@ -68,9 +68,9 @@ class FairLaunchBot {
                 if (bnb_pair) {
                     if (tx.to.toLowerCase() === this.comms_handler.PCS_ROUTER_CA.toLowerCase()) {
                         if (tx.input.slice(0,10).toLowerCase() === "0xf305d719") {
-                            if (tx.input.slice(35, 74)) {
-                                console.log(tx.input.slice(35, 74));
-                                console.log(tx.hash);
+                            if (tx.input.slice(35, 74).toLowerCase() === this.comms_handler.getTargetContract()) {
+                                this.comms_handler.sendTXs(this.sendTxCallback);
+                                await subscription.unsubscribe();
                             }
                         }
                     }
@@ -78,16 +78,13 @@ class FairLaunchBot {
                 else {
                     if (tx.to.toLowerCase() === this.comms_handler.PCS_ROUTER_CA.toLowerCase()) {
                         if (tx.input.slice(0,10).toLowerCase() === "0xe8e33700") {
-                            if (tx.input.slice(35, 74)) {
-                                console.log(tx.input.slice(35, 74));
-                                console.log(tx.hash);
+                            if (tx.input.slice(35, 74).toLowerCase() === this.comms_handler.getTargetContract()) {
+                                this.comms_handler.sendTXs(this.sendTxCallback);
+                                await subscription.unsubscribe();
                             }
                         }
                     }
                 }
-                /*if ()
-                    this.comms_handler.sendTXs(this.sendTxCallback);
-                    await subscription.unsubscribe();*/
             }.bind(this));
     }
 
