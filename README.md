@@ -34,7 +34,7 @@ This free-to-use bot allows you to snipe every token presale on DxSale, Pinksale
 - [x] Antibot avoidance
 - [x] Transaction settings customizable
 - [ ] Multiwallet (*to be developed*)
-- [ ] Fairlaunch sniping (*to be developed*)
+- [x] Fairlaunch sniping
 - [ ] Multichain support (*to be developed*)
 
 
@@ -178,7 +178,7 @@ Then, if required, it will wait for the requested number of blocks before issuin
 ### Specifications
 * `gas_amount`: maximum units of gas you want to use
 * `gas_price`: how much you want to pay the gas in **GWEI** per unit of gas (same unit of measurement as MetaMask)
-* `gas_price`: the amount of BNB you want to send (thus **ETHER** as unit of measurement)
+* `amount`: the amount of BNB you want to send (thus **ETHER** as unit of measurement)
 </br>
 
 <a name="license_link"></a>
