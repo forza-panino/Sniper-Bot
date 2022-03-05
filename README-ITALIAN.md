@@ -36,7 +36,7 @@ Un bot gratuito da usare che consente lo sniping delle presale che avvengono su 
 - [x] Elusione dei sistemi antibot
 - [x] Impostazioni delle transazioni personalizzabili
 - [ ] Multiwallet (*da sviluppare*)
-- [ ] Fairlaunch sniping (*da sviluppare*)
+- [x] Fairlaunch sniping
 - [ ] Supporto multichain (*da sviluppare*)
 
 
@@ -184,7 +184,7 @@ Successivamente, se richiesto, aspetterà un numero di blocchi pari a quello imp
 ### Specifiche tecniche
 * `gas_amount`: il numero massimo di unità di gas che si intende usare
 * `gas_price`: quanto si intende pagare il gas in **GWEI** per unità di gas (stessa unità di misura di MetaMask)
-* `gas_price`: l'ammontare di BNB che si intende inviare (quindi **ETHER** come unità di misura)
+* `amount`: l'ammontare di BNB che si intende inviare (quindi **ETHER** come unità di misura)
 </br>
 
 <a name="license_link"></a>
