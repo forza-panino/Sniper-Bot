@@ -59,11 +59,10 @@ class FairLaunchBot {
      public async startSniping(bnb_pair : boolean) {
 
         await this.comms_handler.prepareFairlaunchTXs(bnb_pair);
-        console.log('\x1b[36m' + language.lang.WAITING_PAIR + '\x1b[0m');
 
         //HOTFIX START
         const rl = readline.createInterface({ input, output });
-        rl.setPrompt(language.lang.CHOOSE_PAIR);
+        rl.setPrompt("Insert presale address: ");
         rl.prompt();
         var presale_address : string;
         for await (let line of rl) {
@@ -72,6 +71,9 @@ class FairLaunchBot {
         }
         console.log("Presale address: " + presale_address);
         //HOTFIX END
+
+        console.log('\x1b[36m' + language.lang.WAITING_PAIR + '\x1b[0m');
+
         
         var subscription = this.comms_handler.subscribePendingTXs(
             async function (tx : any) { 
