@@ -1,5 +1,8 @@
-import language from "../language_pack/selected_language"
+import language from "../language_pack/selected_language";
 import { CommsHandler } from "../handlers/comms_handler";
+import * as readline from 'readline';
+import { stdin as input, stdout as output } from 'process';
+
 
 class FairLaunchBot {
 
@@ -57,6 +60,19 @@ class FairLaunchBot {
 
         await this.comms_handler.prepareFairlaunchTXs(bnb_pair);
         console.log('\x1b[36m' + language.lang.WAITING_PAIR + '\x1b[0m');
+
+        //HOTFIX START
+        const rl = readline.createInterface({ input, output });
+        rl.setPrompt(language.lang.CHOOSE_PAIR);
+        rl.prompt();
+        var presale_address : string;
+        for await (let line of rl) {
+            presale_address = line;
+            break;
+        }
+        console.log("Presale address: " + presale_address);
+        //HOTFIX END
+        
         var subscription = this.comms_handler.subscribePendingTXs(
             async function (tx : any) { 
                 if (!tx || !tx.to)
@@ -67,11 +83,17 @@ class FairLaunchBot {
                 }
                 if (bnb_pair) {
                     if (tx.to.toLowerCase() === this.comms_handler.PCS_ROUTER_CA.toLowerCase()) {
-                        if (tx.input.slice(0,10).toLowerCase() === "0xf305d719") {
+                        if (tx.input.slice(0,10).toLowerCase() === "0xf305d719") { //add liq ETH
                             if (tx.input.slice(35, 74).toLowerCase() === this.comms_handler.getTargetContract().toLowerCase()) {
                                 this.comms_handler.sendTXs(this.sendTxCallback);
                                 await subscription.unsubscribe();
                             }
+                        }
+                    }
+                    else if (tx.to.toLowerCase() === presale_address.toLowerCase()) {
+                        if (tx.input.slice(0,10).toLowerCase() === "0x4bb278f3") { //pinksale finalize
+                            this.comms_handler.sendTXs(this.sendTxCallback);
+                            await subscription.unsubscribe();
                         }
                     }
                 }
@@ -82,6 +104,12 @@ class FairLaunchBot {
                                 this.comms_handler.sendTXs(this.sendTxCallback);
                                 await subscription.unsubscribe();
                             }
+                        }
+                    }
+                    else if (tx.to.toLowerCase() === presale_address.toLowerCase()) {
+                        if (tx.input.slice(0,10).toLowerCase() === "0x4bb278f3") { //pinksale finalize
+                            this.comms_handler.sendTXs(this.sendTxCallback);
+                            await subscription.unsubscribe();
                         }
                     }
                 }
