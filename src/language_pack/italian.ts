@@ -52,6 +52,8 @@ const lang = {
     LIQ_ADDED_WAITING: "C'è liquidità, aspetto il numero di blocchi desiderato...",
     WAITING_BLOCKCHAIN_CONFIRM: "Aspettando conferma dalla blockchain...",
     TX_CONFIRMED: "Transazione confermata.",
-    TX_ERROR: "Errore durante l'esecuzione della transazione. Di seguito i dettagli."
+    TX_ERROR: "Errore durante l'esecuzione della transazione. Di seguito i dettagli.",
+    INSERT_PRESALE_ADDR_FL: "Inserisci eventuale presale address (se lancio dopo presale, altrimenti lasciare vuoto): ",
+    PRESALE_ADDR_CONFIRM_FL: "Presale address: "
 };
 export default {lang}

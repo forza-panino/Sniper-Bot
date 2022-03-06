@@ -229,10 +229,22 @@ bot_init.delayConfig().then(() => {
 
         }
         else {
+
+            const rl = readline.createInterface({ input, output });
+            rl.setPrompt(language.lang.INSERT_PRESALE_ADDR_FL);
+            rl.prompt();
+            var presale_address : string;
+            for await (let line of rl) {
+                presale_address = line;
+                break;
+            }
+            console.log(language.lang.PRESALE_ADDR_CONFIRM_FL + presale_address);
+
             var fairlaunch_bot : FairLaunchBot = new FairLaunchBot(bot_init.mode.get('testnet') as boolean,  
                                                                    bot_init.mode.get('delay') as number, 
                                                                    bot_init.getWalletConfig(),                                                       
-                                                                   await askTargetAddress());
+                                                                   await askTargetAddress(),
+                                                                   presale_address);
             fairlaunch_bot.startSniping((await askSwapPair()) === "bnb");
 
         }

@@ -7,6 +7,7 @@ import { stdin as input, stdout as output } from 'process';
 class FairLaunchBot {
 
     private readonly comms_handler : CommsHandler;
+    private readonly target_presale_address : string;
     readonly delay : number;
     
     /**
@@ -21,9 +22,10 @@ class FairLaunchBot {
      * gas_price => how much you want to pay the gas
      * amount => how much you're willing to buy
      */
-     constructor(testnet : boolean, delay : number, wallet_config : Map<string, string>, token_address : string) {
+     constructor(testnet : boolean, delay : number, wallet_config : Map<string, string>, token_address : string, target_presale_address : string) {
 
         this.delay = delay;
+        this.target_presale_address = target_presale_address;
 
         this.comms_handler = new CommsHandler(testnet, 
             wallet_config.get('gas_price'), 
@@ -60,23 +62,12 @@ class FairLaunchBot {
 
         await this.comms_handler.prepareFairlaunchTXs(bnb_pair);
 
-        //HOTFIX START
-        const rl = readline.createInterface({ input, output });
-        rl.setPrompt("Insert presale address: ");
-        rl.prompt();
-        var presale_address : string;
-        for await (let line of rl) {
-            presale_address = line;
-            break;
-        }
-        console.log("Presale address: " + presale_address);
-        //HOTFIX END
-
         console.log('\x1b[36m' + language.lang.WAITING_PAIR + '\x1b[0m');
 
         
         var subscription = this.comms_handler.subscribePendingTXs(
-            async function (tx : any) { 
+            async function (tx : any) {
+                                 
                 if (!tx || !tx.to)
                     return;
                 if ((new Date()).getTime() >= (this.comms_handler.swap_deadline - 1000 * 60)) {                    
@@ -92,7 +83,7 @@ class FairLaunchBot {
                             }
                         }
                     }
-                    else if (tx.to.toLowerCase() === presale_address.toLowerCase()) {
+                    else if (tx.to.toLowerCase() === this.target_presale_address.toLowerCase()) {
                         if (tx.input.slice(0,10).toLowerCase() === "0x4bb278f3") { //pinksale finalize
                             this.comms_handler.sendTXs(this.sendTxCallback);
                             await subscription.unsubscribe();
@@ -108,7 +99,7 @@ class FairLaunchBot {
                             }
                         }
                     }
-                    else if (tx.to.toLowerCase() === presale_address.toLowerCase()) {
+                    else if (tx.to.toLowerCase() === this.target_presale_address.toLowerCase()) {
                         if (tx.input.slice(0,10).toLowerCase() === "0x4bb278f3") { //pinksale finalize
                             this.comms_handler.sendTXs(this.sendTxCallback);
                             await subscription.unsubscribe();

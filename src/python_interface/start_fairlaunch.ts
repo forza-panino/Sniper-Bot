@@ -34,12 +34,13 @@ process.argv.slice(2).forEach((value : string, key : number) => {
     }
         
 });
+console.log("to implement");
 
-fairlaunch_bot = new FairLaunchBot(
+/*fairlaunch_bot = new FairLaunchBot(
     testnet,
     delay,
     bot_init.getWalletConfig(),
     target_address
-)
+)*/
 
-fairlaunch_bot.startSniping(pair === "bnb")
+//fairlaunch_bot.startSniping(pair === "bnb")
