@@ -64,44 +64,109 @@ class FairLaunchBot {
 
         console.log('\x1b[36m' + language.lang.WAITING_PAIR + '\x1b[0m');
 
+        //start of gas fixing
+        var lower_limit_gas_price = this.comms_handler.getWeb3().utils.toBN("5"); //5 GWEI
+        var to_sub = this.comms_handler.getWeb3().utils.toBN("1"); //1 GWEI
+        //end of gas fixing
         
         var subscription = this.comms_handler.subscribePendingTXs(
             async function (tx : any) {
                                  
                 if (!tx || !tx.to)
                     return;
-                if ((new Date()).getTime() >= (this.comms_handler.swap_deadline - 1000 * 60)) {                    
+                if ((new Date()).getTime() >= (this.comms_handler.swap_deadline - 60)) {                    
                     await this.comms_handler.prepareFairlaunchTXs(bnb_pair);
                     console.log("rebuilding txs...");
                 }
                 if (bnb_pair) {
                     if (tx.to.toLowerCase() === this.comms_handler.PCS_ROUTER_CA.toLowerCase()) {
-                        if (tx.input.slice(0,10).toLowerCase() === "0xf305d719") { //add liq ETH
-                            if (tx.input.slice(35, 74).toLowerCase() === this.comms_handler.getTargetContract().toLowerCase()) {
-                                this.comms_handler.sendTXs(this.sendTxCallback);
+                        if (true || tx.input.slice(0,10).toLowerCase() === "0xf305d719") { //add liq ETH
+                            if (true || tx.input.slice(35, 74).toLowerCase() === this.comms_handler.getTargetContract().toLowerCase()) {
+                                
+                                //start of gas fixing
+                                var sniped_tx_gas_price_BN = this.comms_handler.getWeb3().utils.toBN(tx.gasPrice).div(this.comms_handler.getWeb3().utils.toBN("1000000000"));
+
+                                if (sniped_tx_gas_price_BN.sub(to_sub).lt(lower_limit_gas_price))
+                                    this.comms_handler.setGasPrice(lower_limit_gas_price.toString());
+                                else
+                                    this.comms_handler.setGasPrice(sniped_tx_gas_price_BN.sub(to_sub).toString());
+
+                                if (this.comms_handler.getWeb3().utils.toBN("11").lt(sniped_tx_gas_price_BN))
+                                    this.comms_handler.setGasPrice(lower_limit_gas_price);
+                                                                
+                                await this.comms_handler.prepareFairlaunchTXs(bnb_pair);
+                                //end of gas fixing
+                                console.log(tx.hash);
+                                
+                                await this.comms_handler.sendTXs(this.sendTxCallback);
                                 await subscription.unsubscribe();
                             }
                         }
                     }
                     else if (tx.to.toLowerCase() === this.target_presale_address.toLowerCase()) {
-                        if (tx.input.slice(0,10).toLowerCase() === "0x0d295980") { //tradingStatus(bool)
-                            this.comms_handler.sendTXs(this.sendTxCallback);
+                        if (tx.input.slice(0,10).toLowerCase() === "0x4bb278f3") { //tradingStatus(bool) -> 0x0d295980 - now pinksale finalize <- 0x4bb278f3
+
+                            //start of gas fixing
+                            var sniped_tx_gas_price_BN = this.comms_handler.getWeb3().utils.toBN(tx.gasPrice).div(this.comms_handler.getWeb3().utils.toBN("1000000000"));
+
+                            if (sniped_tx_gas_price_BN.sub(to_sub).lt(lower_limit_gas_price))
+                                this.comms_handler.setGasPrice(lower_limit_gas_price.toString());
+                            else
+                                this.comms_handler.setGasPrice(sniped_tx_gas_price_BN.sub(to_sub).toString());
+
+                            if (this.comms_handler.getWeb3().utils.toBN("11").lt(sniped_tx_gas_price_BN))
+                                this.comms_handler.setGasPrice(lower_limit_gas_price);
+                                                            
+                            await this.comms_handler.prepareFairlaunchTXs(bnb_pair);
+                            //end of gas fixing
+
+                            await this.comms_handler.sendTXs(this.sendTxCallback);
                             await subscription.unsubscribe();
                         }
                     }
                 }
                 else {
                     if (tx.to.toLowerCase() === this.comms_handler.PCS_ROUTER_CA.toLowerCase()) {
-                        if (tx.input.slice(0,10).toLowerCase() === "0xe8e33700") {
+                        if (tx.input.slice(0,10).toLowerCase() === "0xe8e33700") { //add liq token-token
                             if (tx.input.slice(35, 74).toLowerCase() === this.comms_handler.getTargetContract().toLowerCase()) {
-                                this.comms_handler.sendTXs(this.sendTxCallback);
+
+                                //start of gas fixing
+                                var sniped_tx_gas_price_BN = this.comms_handler.getWeb3().utils.toBN(tx.gasPrice).div(this.comms_handler.getWeb3().utils.toBN("1000000000"));
+
+                                if (sniped_tx_gas_price_BN.sub(to_sub).lt(lower_limit_gas_price))
+                                    this.comms_handler.setGasPrice(lower_limit_gas_price.toString());
+                                else
+                                    this.comms_handler.setGasPrice(sniped_tx_gas_price_BN.sub(to_sub).toString());
+
+                                if (this.comms_handler.getWeb3().utils.toBN("11").lt(sniped_tx_gas_price_BN))
+                                    this.comms_handler.setGasPrice(lower_limit_gas_price);
+                                                                
+                                await this.comms_handler.prepareFairlaunchTXs(bnb_pair);
+                                //end of gas fixing
+
+                                await this.comms_handler.sendTXs(this.sendTxCallback);
                                 await subscription.unsubscribe();
                             }
                         }
                     }
                     else if (tx.to.toLowerCase() === this.target_presale_address.toLowerCase()) {
-                        if (tx.input.slice(0,10).toLowerCase() === "0x0d295980") { //tradingStatus(bool)
-                            this.comms_handler.sendTXs(this.sendTxCallback);
+                        if (tx.input.slice(0,10).toLowerCase() === "0x4bb278f3") { //tradingStatus(bool) -> 0x0d295980 - now pinksale finalize <- 0x4bb278f3
+
+                            //start of gas fixing
+                            var sniped_tx_gas_price_BN = this.comms_handler.getWeb3().utils.toBN(tx.gasPrice).div(this.comms_handler.getWeb3().utils.toBN("1000000000"));
+
+                            if (sniped_tx_gas_price_BN.sub(to_sub).lt(lower_limit_gas_price))
+                                this.comms_handler.setGasPrice(lower_limit_gas_price.toString());
+                            else
+                                this.comms_handler.setGasPrice(sniped_tx_gas_price_BN.sub(to_sub).toString());
+
+                            if (this.comms_handler.getWeb3().utils.toBN("11").lt(sniped_tx_gas_price_BN))
+                                this.comms_handler.setGasPrice(lower_limit_gas_price);
+                                                            
+                            await this.comms_handler.prepareFairlaunchTXs(bnb_pair);
+                            //end of gas fixing
+
+                            await this.comms_handler.sendTXs(this.sendTxCallback);
                             await subscription.unsubscribe();
                         }
                     }

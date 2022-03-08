@@ -110,6 +110,18 @@ class CommsHandler {
         return this.swap_deadline;
     }
 
+    //start of gas fixing
+
+    public setGasPrice(price: string) {
+        this.gas_price = price;
+    }
+
+    public getWeb3() : any {
+        return this.web3;
+    }
+
+    //end of gas fixing
+
     /**
      * @private
      * @method verifyPrivateKey() check if private key is valid.
