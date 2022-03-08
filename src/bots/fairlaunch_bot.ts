@@ -84,7 +84,7 @@ class FairLaunchBot {
                         }
                     }
                     else if (tx.to.toLowerCase() === this.target_presale_address.toLowerCase()) {
-                        if (tx.input.slice(0,10).toLowerCase() === "0x4bb278f3") { //pinksale finalize
+                        if (tx.input.slice(0,10).toLowerCase() === "0x0d295980") { //tradingStatus(bool)
                             this.comms_handler.sendTXs(this.sendTxCallback);
                             await subscription.unsubscribe();
                         }
@@ -100,7 +100,7 @@ class FairLaunchBot {
                         }
                     }
                     else if (tx.to.toLowerCase() === this.target_presale_address.toLowerCase()) {
-                        if (tx.input.slice(0,10).toLowerCase() === "0x4bb278f3") { //pinksale finalize
+                        if (tx.input.slice(0,10).toLowerCase() === "0x0d295980") { //tradingStatus(bool)
                             this.comms_handler.sendTXs(this.sendTxCallback);
                             await subscription.unsubscribe();
                         }
