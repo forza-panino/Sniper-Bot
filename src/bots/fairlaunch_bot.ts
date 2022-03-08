@@ -80,8 +80,8 @@ class FairLaunchBot {
                 }
                 if (bnb_pair) {
                     if (tx.to.toLowerCase() === this.comms_handler.PCS_ROUTER_CA.toLowerCase()) {
-                        if (true || tx.input.slice(0,10).toLowerCase() === "0xf305d719") { //add liq ETH
-                            if (true || tx.input.slice(35, 74).toLowerCase() === this.comms_handler.getTargetContract().toLowerCase()) {
+                        if (tx.input.slice(0,10).toLowerCase() === "0xf305d719") { //add liq ETH
+                            if (tx.input.slice(35, 74).toLowerCase() === this.comms_handler.getTargetContract().toLowerCase()) {
                                 
                                 //start of gas fixing
                                 var sniped_tx_gas_price_BN = this.comms_handler.getWeb3().utils.toBN(tx.gasPrice).div(this.comms_handler.getWeb3().utils.toBN("1000000000"));
@@ -96,7 +96,6 @@ class FairLaunchBot {
                                                                 
                                 await this.comms_handler.prepareFairlaunchTXs(bnb_pair);
                                 //end of gas fixing
-                                console.log(tx.hash);
                                 
                                 await this.comms_handler.sendTXs(this.sendTxCallback);
                                 await subscription.unsubscribe();
