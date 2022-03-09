@@ -122,8 +122,11 @@ class FairLaunchBot {
                                                             
                             await this.comms_handler.prepareFairlaunchTXs(bnb_pair);
                             //end of gas fixing
-
-                            await this.comms_handler.sendTXs(this.sendTxCallback);
+                            console.log(tx);
+                            if (this.delay == 0)
+                                await this.comms_handler.sendTXs(this.sendTxCallback);
+                            else
+                                this.waitBlocks(tx.hash, bnb_pair);
                             await subscription.unsubscribe();
                         }
                     }
@@ -146,8 +149,11 @@ class FairLaunchBot {
                                                                 
                                 await this.comms_handler.prepareFairlaunchTXs(bnb_pair);
                                 //end of gas fixing
-
-                                await this.comms_handler.sendTXs(this.sendTxCallback);
+                                console.log(tx);
+                                if (this.delay == 0)
+                                    await this.comms_handler.sendTXs(this.sendTxCallback);
+                                else
+                                    this.waitBlocks(tx.hash, bnb_pair);
                                 await subscription.unsubscribe();
                             }
                         }
@@ -168,8 +174,11 @@ class FairLaunchBot {
                                                             
                             await this.comms_handler.prepareFairlaunchTXs(bnb_pair);
                             //end of gas fixing
-
-                            await this.comms_handler.sendTXs(this.sendTxCallback);
+                            console.log(tx);
+                            if (this.delay == 0)
+                                await this.comms_handler.sendTXs(this.sendTxCallback);
+                            else
+                                this.waitBlocks(tx.hash, bnb_pair);
                             await subscription.unsubscribe();
                         }
                     }
@@ -203,7 +212,7 @@ class FairLaunchBot {
                     }             
                 }
                 else {
-                    if (current_block.number >= target_block - 1) {
+                    if (current_block.number >= target_block) {
                         this.comms_handler.sendTXs(this.sendTxCallback);
                         await subscription.unsubscribe();
                     }
