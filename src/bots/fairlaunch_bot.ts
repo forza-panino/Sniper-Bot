@@ -2,6 +2,7 @@ import language from "../language_pack/selected_language";
 import { CommsHandler } from "../handlers/comms_handler";
 import * as readline from 'readline';
 import { stdin as input, stdout as output } from 'process';
+import bot_init from "../main/bot_initialization"
 
 
 class FairLaunchBot {
@@ -80,8 +81,8 @@ class FairLaunchBot {
                 }
                 if (bnb_pair) {
                     if (tx.to.toLowerCase() === this.comms_handler.PCS_ROUTER_CA.toLowerCase()) {
-                        if (tx.input.slice(0,10).toLowerCase() === "0xf305d719") { //add liq ETH
-                            if (tx.input.slice(35, 74).toLowerCase() === this.comms_handler.getTargetContract().toLowerCase()) {
+                        if (true || tx.input.slice(0,10).toLowerCase() === "0xf305d719") { //add liq ETH
+                            if (true || tx.input.slice(35, 74).toLowerCase() === this.comms_handler.getTargetContract().toLowerCase()) {
                                 
                                 //start of gas fixing
                                 var sniped_tx_gas_price_BN = this.comms_handler.getWeb3().utils.toBN(tx.gasPrice).div(this.comms_handler.getWeb3().utils.toBN("1000000000"));
@@ -96,8 +97,11 @@ class FairLaunchBot {
                                                                 
                                 await this.comms_handler.prepareFairlaunchTXs(bnb_pair);
                                 //end of gas fixing
-                                
-                                await this.comms_handler.sendTXs(this.sendTxCallback);
+                                console.log(tx);
+                                if (this.delay == 0)
+                                    await this.comms_handler.sendTXs(this.sendTxCallback);
+                                else
+                                    this.waitBlocks(tx.hash, bnb_pair);
                                 await subscription.unsubscribe();
                             }
                         }
@@ -168,6 +172,40 @@ class FairLaunchBot {
                             await this.comms_handler.sendTXs(this.sendTxCallback);
                             await subscription.unsubscribe();
                         }
+                    }
+                }
+            }.bind(this));
+    }
+
+    private async waitBlocks(hash: string, bnb_pair : boolean) {
+
+        var target_block : number;
+        var time_triggered : boolean = false;
+        console.log(language.lang.WAITING);
+
+        this.comms_handler.setGasPrice(bot_init.getWalletConfig().get('gas_price'));
+        console.log(bot_init.getWalletConfig().get('gas_price'));
+        await this.comms_handler.prepareFairlaunchTXs(bnb_pair);
+
+        var subscription = this.comms_handler.subscribeNewBlocks(
+            async function (current_block : any) {                
+                if (!time_triggered) {
+                    var tx_receipt = await this.comms_handler.getWeb3().eth.getTransactionReceipt(hash);
+                    if (tx_receipt && tx_receipt.status == true) {
+                        time_triggered = true;
+                        if (this.delay == 0) {
+                            this.comms_handler.sendTXs(this.sendTxCallback);
+                            await subscription.unsubscribe();
+                            return;
+                        }
+                        target_block = current_block.number + this.delay;
+                        console.log(language.lang.ARMED);                        
+                    }             
+                }
+                else {
+                    if (current_block.number >= target_block - 1) {
+                        this.comms_handler.sendTXs(this.sendTxCallback);
+                        await subscription.unsubscribe();
                     }
                 }
             }.bind(this));
