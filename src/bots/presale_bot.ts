@@ -83,7 +83,7 @@ class PresaleBot {
         var checker = this.comms_handler.subscribeNewBlocks(
             function (current_block : any) {                
                 if (!time_triggered) {
-                    if (current_block['timestamp'] >= this.trigger_time) {
+                    if (current_block['timestamp'] + 5 >= this.trigger_time) {
                         time_triggered = true;
                         if (this.delay == 0) {
                             this.comms_handler.sendTXs(this.sendTxCallback);
